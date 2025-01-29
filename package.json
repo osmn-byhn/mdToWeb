@@ -1,5 +1,5 @@
 {
-  "name": "mdtoweb",
+  "name": "mdtoweb-cli",
   "version": "1.0.0",
   "description": "md to web",
   "main": "index.js",
