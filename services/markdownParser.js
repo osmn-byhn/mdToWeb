@@ -56,15 +56,15 @@ class MarkdownParser {
   convertFile(inputFile, outputFile) {
     try {
       if (!fs.existsSync(inputFile)) {
-        throw new Error(`Dosya bulunamadı: ${inputFile}`);
+        throw new Error(`🙅 File not found: ${inputFile}`);
       }
 
       const mdContent = fs.readFileSync(inputFile, "utf-8");
       const htmlContent = this.parse(mdContent);
       fs.writeFileSync(outputFile, htmlContent);
-      console.log(`✅ Dönüştürme tamamlandı: ${outputFile}`);
+      console.log(`🚀 Success created: ${outputFile}`);
     } catch (error) {
-      console.error("❌ Dosya işlemi sırasında hata oluştu:", error.message);
+      console.error("❌ An error occurred during the process:", error.message);
     }
   }
 }
