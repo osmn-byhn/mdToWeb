@@ -1,0 +1,22 @@
+{
+  "name": "mdtoweb",
+  "version": "1.0.0",
+  "description": "md to web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osmn-byhn/mdToWeb.git"
+  },
+  "keywords": [
+    "md"
+  ],
+  "author": "Osman Beyhan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/osmn-byhn/mdToWeb/issues"
+  },
+  "homepage": "https://github.com/osmn-byhn/mdToWeb#readme"
+}
