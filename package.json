@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/osmn-byhn/mdToWeb/issues"
   },
-  "homepage": "https://www.mdtodocs.osmanbeyhan.com/",
+  "homepage": "https://www.mdtoweb.osmanbeyhan.com/",
   "dependencies": {
     "fs": "^0.0.1-security",
     "inquirer": "^12.3.3",
