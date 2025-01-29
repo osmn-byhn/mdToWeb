@@ -1,6 +1,8 @@
-const fs = require("fs");
+/*const fs = require("fs");
 const path = require("path");
-
+*/
+import fs from "fs";
+import path from "path";
 class MarkdownParser {
   constructor() {}
 
@@ -67,4 +69,4 @@ class MarkdownParser {
   }
 }
 
-module.exports = MarkdownParser;
+export default MarkdownParser;

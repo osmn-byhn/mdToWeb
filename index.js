@@ -1,7 +1,11 @@
-const fs = require("fs");
-const path = require("path");
-const inquirer = require("inquirer");
-const MarkdownParser = require("./services/markdownParser");
+import fs from "fs";
+import path from "path";
+import inquirer from "inquirer";
+import { fileURLToPath } from "url";
+import MarkdownParser from "./services/markdownParser.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const prompt = inquirer.createPromptModule();
 

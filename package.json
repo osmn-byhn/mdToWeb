@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/osmn-byhn/mdToWeb.git"
   },
+  "bin": {
+    "mtdocs": "./bin/cli.js"
+  },
   "keywords": [
     "md",
     "web",
@@ -18,7 +21,7 @@
     "mdx"
   ],
   "author": "Osman Beyhan",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/osmn-byhn/mdToWeb/issues"
   },
@@ -27,5 +30,6 @@
     "fs": "^0.0.1-security",
     "inquirer": "^12.3.3",
     "marked": "^15.0.6"
-  }
+  },
+  "type": "module"
 }
