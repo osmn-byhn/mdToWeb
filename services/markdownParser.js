@@ -1,8 +1,6 @@
-/*const fs = require("fs");
-const path = require("path");
-*/
 import fs from "fs";
 import path from "path";
+
 class MarkdownParser {
   constructor() {}
 
@@ -53,15 +51,27 @@ class MarkdownParser {
     );
   }
 
-  convertFile(inputFile, outputFile) {
+  convertFile(inputFile, outputFile, template, mulitLang, languages) {
     try {
       if (!fs.existsSync(inputFile)) {
         throw new Error(`🙅 File not found: ${inputFile}`);
       }
-
+      
       const mdContent = fs.readFileSync(inputFile, "utf-8");
       const htmlContent = this.parse(mdContent);
-      fs.writeFileSync(outputFile, htmlContent);
+      
+      let finalHtml = htmlContent;
+      if (template === "Basic") {
+        const templatePath = path.join("consts/themes/basic.html");
+        if (fs.existsSync(templatePath)) {
+          let templateContent = fs.readFileSync(templatePath, "utf-8");
+          finalHtml = templateContent.replace("<div id=\"app\"></div>", `<div id=\"app\">${htmlContent}</div>`);
+        } else {
+          throw new Error("🙅 Template file not found");
+        }
+      }
+      
+      fs.writeFileSync(outputFile, finalHtml);
       console.log(`🚀 Success created: ${outputFile}`);
     } catch (error) {
       console.error("❌ An error occurred during the process:", error.message);

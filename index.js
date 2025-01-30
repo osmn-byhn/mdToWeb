@@ -44,23 +44,43 @@ prompt([
     message: "Select languages",
     type: "checkbox",
     choices: languageChoices,
-    when: (answers) => answers.language, // Eğer kullanıcı "yes" seçerse göster
+    when: (answers) => answers.language, // Eğer "yes" seçilirse göster
+  },
+  {
+    name: "filePath",
+    message: "Enter MD file name (without extension):",
+    default: "documentation",
+    when: (answers) => !answers.language, // Eğer "multi-language" seçilmezse tek dosya istenir
   },
 ]).then(async (answers) => {
   let files = [];
 
   if (answers.language) {
+    // Çoklu dil desteği için
     for (const langCode of answers.select_language) {
       const langName = languages.find((lang) => lang.code === langCode)?.name || langCode;
 
       const langAnswers = await prompt([
-        { name: "filePath", message: `Enter MD file name for ${langName} (without extension):`, default: langCode },
+        {
+          name: "filePath",
+          message: `Enter MD file name for ${langName} (without extension):`,
+          default: langCode,
+        },
       ]);
 
-      files.push({ langCode, docName: answers.title, filePath: `${langAnswers.filePath}.md` });
+      files.push({
+        langCode,
+        docName: answers.title,
+        filePath: `${langAnswers.filePath}.md`,
+      });
     }
   } else {
-    files.push({ langCode: "default", docName: answers.title, filePath: answers.file });
+    // Tek dil desteği için
+    files.push({
+      langCode: "en",
+      docName: answers.title,
+      filePath: `${answers.filePath}.md`,
+    });
   }
 
   files.forEach(({ langCode, docName, filePath }) => {
@@ -81,6 +101,6 @@ prompt([
     const parser = new MarkdownParser();
     const outputFile = path.resolve(__dirname, `index_${langCode}.html`);
 
-    parser.convertFile(fullFilePath, outputFile);
+    parser.convertFile(fullFilePath, outputFile, answers.template);
   });
 });
