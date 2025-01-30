@@ -68,8 +68,9 @@ class MarkdownParser {
       const htmlContent = this.parse(mdContent);
 
       let finalHtml = htmlContent;
-      let bodyClasses = ""; // Default light theme classes
-      let themeToggle = ""; // Default empty theme toggle
+      let bodyClasses = "";
+      let themeToggle = "";
+      let authorHTML = "";
 
       if (theme === "Light") {
         bodyClasses = "bg-gray-100 text-black";
@@ -80,8 +81,13 @@ class MarkdownParser {
       if (theme === "Light and Dark") {
         bodyClasses = "bg-gray-900 text-white";
         themeToggle = `
-          <i id="theme-toggle" class="bi bi-sun fixed top-4 right-4 p-2 text-3xl"></i>
-        `;
+
+                <i id="theme-toggle" class="bi bi-sun fixed top-4 right-4 p-2 text-3xl"></i>
+            `;
+      }
+
+      if (author !== "") {
+        authorHTML = `<p class="text-right text-black dark:text-white">Author: ${author}</p>`;
       }
 
       if (theme === "Auto Theme") {
@@ -89,34 +95,37 @@ class MarkdownParser {
       }
 
       let toggleHTML = `
-        ${themeToggle}
-        <script>
-            const toggleButton = document.getElementById("theme-toggle");
-            
-            toggleButton.addEventListener("click", () => {
-              if (document.body.classList.contains("bg-white")) {
-                document.body.classList.remove("bg-white", "text-black");
-                document.body.classList.add("bg-gray-900", "text-white");
-                toggleButton.classList.remove("bi-sun");
-                toggleButton.classList.add("bi-moon");
-              } else {
-                document.body.classList.remove("bg-gray-900", "text-white");
-                document.body.classList.add("bg-white", "text-black");
-                toggleButton.classList.remove("bi-moon");
-                toggleButton.classList.add("bi-sun");
-              }
-            });
-          </script>
-      `;
+            ${themeToggle}
+            <script>
+                const toggleButton = document.getElementById("theme-toggle");
+                toggleButton.addEventListener("click", () => {
+                    if (document.body.classList.contains("bg-white")) {
+                        document.body.classList.remove("bg-white", "text-black");
+                        document.body.classList.add("bg-gray-900", "text-white");
+                        toggleButton.classList.remove("bi-sun");
+                        toggleButton.classList.add("bi-moon");
+                    } else {
+                        document.body.classList.remove("bg-gray-900", "text-white");
+                        document.body.classList.add("bg-white", "text-black");
+                        toggleButton.classList.remove("bi-moon");
+                        toggleButton.classList.add("bi-sun");
+                    }
+                });
+            </script>
+        `;
 
-      // If template is one of the specific options, add the relevant HTML
       if (template === "Basic") {
         const templatePath = path.join("consts/themes/basic.html");
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app">${htmlContent}  ${toggleHTML}</div>`
+            `<div id="app">${htmlContent} ${toggleHTML} ${authorHTML}</div>`
+          );
+          // Add title tag
+          finalHtml = finalHtml.replace(
+            "<title></title>",
+            `<title>${title}</title>`
           );
         } else {
           throw new Error("🙅 Template file not found");
@@ -129,7 +138,12 @@ class MarkdownParser {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app">${htmlContent} ${toggleHTML}</div>`
+            `<div id="app">${htmlContent} ${toggleHTML} ${authorHTML}</div>`
+          );
+          // Add title tag
+          finalHtml = finalHtml.replace(
+            "<title></title>",
+            `<title>${title}</title>`
           );
         } else {
           throw new Error("🙅 Template file not found");
@@ -142,7 +156,12 @@ class MarkdownParser {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app">${htmlContent} ${toggleHTML}</div>`
+            `<div id="app">${htmlContent} ${toggleHTML} ${authorHTML}</div>`
+          );
+          // Add title tag
+          finalHtml = finalHtml.replace(
+            "<title></title>",
+            `<title>${title}</title>`
           );
         } else {
           throw new Error("🙅 Template file not found");
