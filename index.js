@@ -10,7 +10,22 @@ const __dirname = path.dirname(__filename);
 const languagesFile = path.join(__dirname, "consts", "languages.json");
 const languages = JSON.parse(fs.readFileSync(languagesFile, "utf-8"));
 
-const languageChoices = languages.map((lang) => ({ name: lang.name, value: lang.code }));
+const languageChoices = languages.map((lang) => ({
+  name: lang.name,
+  value: lang.code,
+}));
+
+const socialMediaPlatforms = [
+  { name: "GitHub", value: "github", icon: "bi-github" },
+  { name: "Twitter", value: "twitter", icon: "bi-twitter-x" },
+  { name: "LinkedIn", value: "linkedin", icon: "bi-linkedin" },
+  { name: "Facebook", value: "facebook", icon: "bi-facebook" },
+  { name: "Instagram", value: "instagram", icon: "bi-instagram" },
+  { name: "Reddit", value: "reddit", icon: "bi-reddit" },
+  { name: "YouTube", value: "youtube", icon: "bi-youtube" },
+  { name: "Web", value: "web", icon: "bi-globe-americas" },
+  { name: "Other", value: "other", icon: "bi-link-45deg" },
+];
 
 const prompt = inquirer.createPromptModule();
 
@@ -38,24 +53,76 @@ prompt([
     default: false,
   },
   {
-    name: "select_language",
-    message: "Select languages",
-    type: "checkbox",
-    choices: languageChoices,
-    when: (answers) => answers.language,
+    name: "links",
+    message: "Do you add social media links?",
+    type: "confirm",
+    default: false,
   },
   {
-    name: "filePath",
-    message: "Enter MD file name (without extension):",
-    default: "documentation",
-    when: (answers) => !answers.language,
+    name: "sourceLinks",
+    message: "Do you add source?",
+    type: "confirm",
+    default: false,
+  },
+  {
+    name: "socialMedia",
+    message: "Select social media platforms",
+    type: "checkbox",
+    choices: socialMediaPlatforms,
+    when: (answers) => answers.links,
   },
 ]).then(async (answers) => {
+  let socialLinks = {};
+  let sourceLinks = {};
+  let langAnswers = {};
+
+  if (answers.links && answers.socialMedia.length > 0) {
+    for (const platform of answers.socialMedia) {
+      const { url } = await prompt([
+        {
+          name: "url",
+          message: `Enter URL for ${platform}:`,
+          validate: (input) =>
+            input.startsWith("http") ? true : "Enter a valid URL.",
+        },
+      ]);
+      socialLinks[platform] = url;
+    }
+  }
+
+  if (answers.sourceLinks) {
+    console.log("\n📜 Kaynakça eklemek için aşağıdaki bilgileri girin.");
+    console.log('Çıkmak için "q" tuşuna basın.\n');
+
+    while (true) {
+      const { name } = await prompt([
+        {
+          name: "name",
+          message: "Kaynakça ismi:",
+        },
+      ]);
+
+      if (name.toLowerCase() === "q") break;
+
+      const { url } = await prompt([
+        {
+          name: "url",
+          message: `URL (${name}):`,
+          validate: (input) =>
+            input.startsWith("http") ? true : "Enter a valid URL.",
+        },
+      ]);
+
+      sourceLinks[name] = url;
+    }
+  }
+
   let files = [];
 
   if (answers.language) {
     for (const langCode of answers.select_language) {
-      const langName = languages.find((lang) => lang.code === langCode)?.name || langCode;
+      const langName =
+        languages.find((lang) => lang.code === langCode)?.name || langCode;
 
       const langAnswers = await prompt([
         {
@@ -72,10 +139,18 @@ prompt([
       });
     }
   } else {
+    const { filePath } = await prompt([
+      {
+        name: "filePath",
+        message: "Enter MD file name (without extension):",
+        default: "documentation",
+      },
+    ]);
+
     files.push({
       langCode: "en",
       docName: answers.title,
-      filePath: `${answers.filePath}.md`,
+      filePath: `${filePath}.md`,
     });
   }
 
@@ -94,9 +169,31 @@ prompt([
     console.log(`🌕 Theme: ${answers.theme}`);
     console.log(`📁 File Path: ${fullFilePath}`);
 
+    if (answers.links) {
+      console.log("🔗 Social Media Links:");
+      Object.entries(socialLinks).forEach(([platform, url]) => {
+        console.log(`   - ${platform}: ${url}`);
+      });
+    }
+
+    if (answers.sourceLinks) {
+      console.log("📜 Sources:");
+      Object.entries(sourceLinks).forEach(([name, url]) => {
+        console.log(`   - ${name}: ${url}`);
+      });
+    }
+
     const parser = new MarkdownParser();
     const outputFile = path.resolve(__dirname, `index_${langCode}.html`);
-
-    parser.convertFile(fullFilePath, outputFile, answers.template);
+    parser.convertFile(
+      fullFilePath,
+      outputFile,
+      answers.template,
+      answers.language,
+      files,
+      answers.title,
+      answers.author,
+      answers.theme
+    );
   });
 });
