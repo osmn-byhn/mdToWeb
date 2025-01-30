@@ -7,11 +7,9 @@ import MarkdownParser from "./services/markdownParser.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// languages.json dosyasının yolu
 const languagesFile = path.join(__dirname, "consts", "languages.json");
 const languages = JSON.parse(fs.readFileSync(languagesFile, "utf-8"));
 
-// Dil seçimleri için choices dizisini hazırla
 const languageChoices = languages.map((lang) => ({ name: lang.name, value: lang.code }));
 
 const prompt = inquirer.createPromptModule();
@@ -44,19 +42,18 @@ prompt([
     message: "Select languages",
     type: "checkbox",
     choices: languageChoices,
-    when: (answers) => answers.language, // Eğer "yes" seçilirse göster
+    when: (answers) => answers.language,
   },
   {
     name: "filePath",
     message: "Enter MD file name (without extension):",
     default: "documentation",
-    when: (answers) => !answers.language, // Eğer "multi-language" seçilmezse tek dosya istenir
+    when: (answers) => !answers.language,
   },
 ]).then(async (answers) => {
   let files = [];
 
   if (answers.language) {
-    // Çoklu dil desteği için
     for (const langCode of answers.select_language) {
       const langName = languages.find((lang) => lang.code === langCode)?.name || langCode;
 
@@ -75,7 +72,6 @@ prompt([
       });
     }
   } else {
-    // Tek dil desteği için
     files.push({
       langCode: "en",
       docName: answers.title,
