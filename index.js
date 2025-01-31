@@ -57,7 +57,7 @@ prompt([
     message: "Select the languages you want to use:",
     type: "checkbox",
     choices: languageChoices,
-    when: (answers) => answers.multiLang, // Sadece çoklu dil seçilmişse göster
+    when: (answers) => answers.multiLang, 
   },  
   {
     name: "links",

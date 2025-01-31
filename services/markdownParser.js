@@ -85,18 +85,18 @@ class MarkdownParser {
         bodyClasses = "bg-gray-900 text-white";
         themeToggle = `
 
-                <i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-white dark:text-black rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-3xl"></i>
+                <i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-xl"></i>
             `;
       }
 
-      if (mulitLang === true) {
+      if (mulitLang.length > 0) {
         themeToggle = `
-        <div class="flex justify-between gap-2 bg-white text-black dark:bg-white dark:text-black rounded-md shadow-md p-3 fixed top-4 right-4 p-2 ">
-          <i id="theme-toggle" class="bi bi-sun text-3xl"></i>
-          <select class="bg-white text-black dark:bg-white dark:text-black rounded-md shadow-md p-3 text-3xl">
+        <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 ">
+          <i id="theme-toggle" class="bi bi-sun text-xl"></i>
+          <select class="text-black dark:text-white text-xl">
             ${languages
               .map(
-                (lang) => `<option value="${lang.code}">${lang.name}</option>`
+                (lang) => `<option value="${lang.langCode}">${lang.langCode}</option>`
               )
               .join("")}
           </select>
