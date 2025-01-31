@@ -47,11 +47,18 @@ prompt([
     default: "Light",
   },
   {
-    name: "language",
+    name: "multiLang",
     message: "Do you use multiple languages?",
     type: "confirm",
     default: false,
   },
+  {
+    name: "language",
+    message: "Select the languages you want to use:",
+    type: "checkbox",
+    choices: languageChoices,
+    when: (answers) => answers.multiLang, // Sadece çoklu dil seçilmişse göster
+  },  
   {
     name: "links",
     message: "Do you add social media links?",
@@ -119,8 +126,9 @@ prompt([
 
   let files = [];
 
-  if (answers.language) {
-    for (const langCode of answers.select_language) {
+  if (answers.multiLang) {
+    for (const langCode of answers.language) { // Doğru değişken adı
+  
       const langName =
         languages.find((lang) => lang.code === langCode)?.name || langCode;
 

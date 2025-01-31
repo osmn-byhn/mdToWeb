@@ -15,7 +15,10 @@ class MarkdownParser {
       .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
       .replace(/\*(.*?)\*/g, "<i>$1</i>")
       .replace(/~~(.*?)~~/g, "<del>$1</del>")
-      .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
+      .replace(
+        /```([\s\S]*?)```/g,
+        "<div class='code-container relative rounded-lg p-4 overflow-auto mt-2'><button class='copy-btn absolute top-3 right-3 bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-3 py-1 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition m-[25px] z-[20]'><i id='copyBtn' class='bi bi-clipboard'></i></button><pre class='line-numbers'><code class='language-js'>$1</code></pre></div>"
+      )
       .replace(/`(.*?)`/g, "<code>$1</code>")
       .replace(/^> (.*$)/gm, "<blockquote>$1</blockquote>")
       .replace(/^---$/gm, "<hr>")
@@ -82,8 +85,22 @@ class MarkdownParser {
         bodyClasses = "bg-gray-900 text-white";
         themeToggle = `
 
-                <i id="theme-toggle" class="bi bi-sun fixed top-4 right-4 p-2 text-3xl"></i>
+                <i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-white dark:text-black rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-3xl"></i>
             `;
+      }
+
+      if (mulitLang === true) {
+        themeToggle = `
+        <div class="flex justify-between gap-2 bg-white text-black dark:bg-white dark:text-black rounded-md shadow-md p-3 fixed top-4 right-4 p-2 ">
+          <i id="theme-toggle" class="bi bi-sun text-3xl"></i>
+          <select class="bg-white text-black dark:bg-white dark:text-black rounded-md shadow-md p-3 text-3xl">
+            ${languages
+              .map(
+                (lang) => `<option value="${lang.code}">${lang.name}</option>`
+              )
+              .join("")}
+          </select>
+        </div>`;
       }
 
       if (author !== "") {
@@ -95,24 +112,31 @@ class MarkdownParser {
       }
 
       let toggleHTML = `
-            ${themeToggle}
-            <script>
-                const toggleButton = document.getElementById("theme-toggle");
-                toggleButton.addEventListener("click", () => {
-                    if (document.body.classList.contains("bg-white")) {
-                        document.body.classList.remove("bg-white", "text-black");
-                        document.body.classList.add("bg-gray-900", "text-white");
-                        toggleButton.classList.remove("bi-sun");
-                        toggleButton.classList.add("bi-moon");
-                    } else {
-                        document.body.classList.remove("bg-gray-900", "text-white");
-                        document.body.classList.add("bg-white", "text-black");
-                        toggleButton.classList.remove("bi-moon");
-                        toggleButton.classList.add("bi-sun");
-                    }
-                });
-            </script>
-        `;
+        ${themeToggle}
+        <script>
+          const toggleButton = document.getElementById("theme-toggle");
+          toggleButton.addEventListener("click", () => {
+            if (document.body.classList.contains("bg-white")) {
+              document.body.classList.remove("bg-white", "text-black");
+              document.body.classList.add("bg-gray-900", "text-white");
+              toggleButton.classList.remove("bi-sun");
+              toggleButton.classList.add("bi-moon");
+            } else {
+              document.body.classList.remove("bg-gray-900", "text-white");
+              document.body.classList.add("bg-white", "text-black");
+              toggleButton.classList.remove("bi-moon");
+              toggleButton.classList.add("bi-sun");
+            }
+          });
+          document.querySelector(".copy-btn").addEventListener("click", function () {
+            const code = document.querySelector("pre code").innerText;
+            navigator.clipboard.writeText(code);
+            const copyBtn = document.getElementById("copyBtn");
+            copyBtn.classList.remove("bi-clipboard");
+            copyBtn.classList.add("bi-clipboard-check");
+          });
+        </script>
+      `;
 
       if (template === "Basic") {
         const templatePath = path.join("consts/themes/basic.html");
@@ -167,7 +191,7 @@ class MarkdownParser {
           throw new Error("🙅 Template file not found");
         }
       }
-      console.log(theme, themeToggle);
+      console.log(mulitLang, languages);
 
       fs.writeFileSync(outputFile, finalHtml);
       console.log(`🚀 Success created: ${outputFile}`);
