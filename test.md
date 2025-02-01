@@ -1,91 +1,106 @@
-# Markdown Kılavuzu
+# Başlıklar
 
-## Başlıklar
+# Başlık 1
+## Başlık 2
+### Başlık 3
+#### Başlık 4
+##### Başlık 5
+###### Başlık 6
 
-```md
-# H1 Başlık
-## H2 Başlık
-### H3 Başlık
-#### H4 Başlık
-##### H5 Başlık
-###### H6 Başlık
-```
+---
 
-## Kalın, İtalik ve Üstü Çizili
+# Metin Biçimlendirme
 
-```md
-**Kalın Metin**
-*İtalik Metin*
-~~Üstü Çizili Metin~~
-```
+**Kalın Metin**  
+*İtalik Metin*  
+~~Üstü Çizili Metin~~  
+**_Kalın ve İtalik_**  
 
-## Alıntı
+---
 
-```md
-> Bu bir alıntıdır.
-```
+# Listeleme
 
-## Kod Blokları
-
-```md
-`inline code`
-
-```js
-console.log("Merhaba Dünya!");
-```
-```
-
-## Listeler
-
-### Sırasız Liste
-
-```md
+## Sırasız Liste
 - Öğe 1
 - Öğe 2
-  - Alt Öğe 2.1
-  - Alt Öğe 2.2
+  - Alt Öğesi 1
+  - Alt Öğesi 2
+- Öğe 3
+
+## Sıralı Liste
+1. İlk Öğesi
+2. İkinci Öğesi
+   1. Alt Öğesi 1
+   2. Alt Öğesi 2
+3. Üçüncü Öğesi
+
+---
+
+# Bağlantılar
+
+[Google'a Git](https://www.google.com)  
+
+<https://www.google.com>
+
+---
+
+# Görseller
+
+![Alternatif Metin](https://via.placeholder.com/150)
+
+---
+
+# Kod Blokları
+
+## Satır içi kod
+`console.log('Merhaba Dünya!');`
+
+## Blok kod
+```javascript
+function selamVer() {
+  console.log("Merhaba Dünya!");
+}
 ```
 
-### Sıralı Liste
+---
 
-```md
-1. Birinci Öğe
-2. İkinci Öğe
-   1. Alt Öğe 1
-   2. Alt Öğe 2
-```
+# Alıntılar
 
-## Bağlantılar ve Görseller
+> Bu bir alıntıdır.
+>
+> - Alıntı Sahibi
 
-```md
-[Google'a Git](https://www.google.com)
+---
 
-![Alternatif Metin](https://example.com/image.jpg)
-```
+# Tablolar
 
-## Tablolar
-
-```md
 | Başlık 1 | Başlık 2 | Başlık 3 |
 |----------|----------|----------|
-| İçerik 1 | İçerik 2 | İçerik 3 |
-| İçerik 4 | İçerik 5 | İçerik 6 |
-```
+| Veri 1   | Veri 2   | Veri 3   |
+| Veri 4   | Veri 5   | Veri 6   |
 
-## Yatay Çizgi
-
-```md
 ---
-```
 
-## Görev Listesi
+# Kontrol Listesi
 
-```md
 - [x] Yapıldı
-- [ ] Yapılmadı
-```
+- [ ] Yapılacak
 
-## Kaçış Karakterleri
+---
 
-```md
-\*Yıldızlı\* \#Başlık\# \`Kod\`
+# Kaçış Karakterleri
+
+\*Yıldız* \#Başlık \[Köşeli Parantez]
+
+---
+
+# Emoji
+
+🚀 🌟 🎉 ✅
+
+---
+
+# HTML Desteği
+
+<b>Kalın</b> <i>İtalik</i> <u>Altı Çizili</u>
+

@@ -3,18 +3,14 @@ import path from "path";
 import inquirer from "inquirer";
 import { fileURLToPath } from "url";
 import MarkdownParser from "./services/markdownParser.js";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const languagesFile = path.join(__dirname, "consts", "languages.json");
 const languages = JSON.parse(fs.readFileSync(languagesFile, "utf-8"));
-
 const languageChoices = languages.map((lang) => ({
   name: lang.name,
   value: lang.code,
 }));
-
 const socialMediaPlatforms = [
   { name: "GitHub", value: "github", icon: "bi-github" },
   { name: "Twitter", value: "twitter", icon: "bi-twitter-x" },
@@ -26,9 +22,7 @@ const socialMediaPlatforms = [
   { name: "Web", value: "web", icon: "bi-globe-americas" },
   { name: "Other", value: "other", icon: "bi-link-45deg" },
 ];
-
 const prompt = inquirer.createPromptModule();
-
 prompt([
   { name: "title", message: "Docs title?", default: "Example Title" },
   { name: "author", message: "Author?", default: "John Doe" },
@@ -96,11 +90,9 @@ prompt([
       socialLinks[platform] = url;
     }
   }
-
   if (answers.sourceLinks) {
     console.log("\n📜 Kaynakça eklemek için aşağıdaki bilgileri girin.");
     console.log('Çıkmak için "q" tuşuna basın.\n');
-
     while (true) {
       const { name } = await prompt([
         {
@@ -108,9 +100,7 @@ prompt([
           message: "Kaynakça ismi:",
         },
       ]);
-
       if (name.toLowerCase() === "q") break;
-
       const { url } = await prompt([
         {
           name: "url",
@@ -119,19 +109,14 @@ prompt([
             input.startsWith("http") ? true : "Enter a valid URL.",
         },
       ]);
-
       sourceLinks[name] = url;
     }
   }
-
   let files = [];
-
   if (answers.multiLang) {
-    for (const langCode of answers.language) { // Doğru değişken adı
-  
+    for (const langCode of answers.language) {
       const langName =
         languages.find((lang) => lang.code === langCode)?.name || langCode;
-
       const langAnswers = await prompt([
         {
           name: "filePath",
@@ -139,7 +124,6 @@ prompt([
           default: langCode,
         },
       ]);
-
       files.push({
         langCode,
         docName: answers.title,
@@ -154,43 +138,36 @@ prompt([
         default: "documentation",
       },
     ]);
-
     files.push({
       langCode: "en",
       docName: answers.title,
       filePath: `${filePath}.md`,
     });
   }
-
   files.forEach(({ langCode, docName, filePath }) => {
     const fullFilePath = path.join(__dirname, filePath);
-
     if (!fs.existsSync(fullFilePath)) {
       console.error(`❌ File not found: ${fullFilePath}`);
       return;
     }
-
     console.log(`✅ File found: ${fullFilePath}`);
     console.log(`⭕ Docs Title: ${docName}`);
     console.log(`👨‍💻 Docs Author: ${answers.author}`);
     console.log(`📦 Template: ${answers.template}`);
     console.log(`🌕 Theme: ${answers.theme}`);
     console.log(`📁 File Path: ${fullFilePath}`);
-
     if (answers.links) {
       console.log("🔗 Social Media Links:");
       Object.entries(socialLinks).forEach(([platform, url]) => {
         console.log(`   - ${platform}: ${url}`);
       });
     }
-
     if (answers.sourceLinks) {
       console.log("📜 Sources:");
       Object.entries(sourceLinks).forEach(([name, url]) => {
         console.log(`   - ${name}: ${url}`);
       });
     }
-
     const parser = new MarkdownParser();
     const outputFile = path.resolve(__dirname, "index.html");
     parser.convertFile(
@@ -201,7 +178,10 @@ prompt([
       files,
       answers.title,
       answers.author,
-      answers.theme
+      answers.theme,
+      answers.links,
+      sourceLinks,
+      socialLinks
     );
   });
 });

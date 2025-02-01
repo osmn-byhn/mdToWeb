@@ -29,8 +29,7 @@
   "homepage": "https://www.mdtoweb.osmanbeyhan.com/",
   "dependencies": {
     "fs": "^0.0.1-security",
-    "inquirer": "^12.3.3",
-    "marked": "^15.0.6"
+    "inquirer": "^12.3.3"
   },
   "type": "module"
 }
