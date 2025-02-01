@@ -192,7 +192,7 @@ prompt([
     }
 
     const parser = new MarkdownParser();
-    const outputFile = path.resolve(__dirname, `index_${langCode}.html`);
+    const outputFile = path.resolve(__dirname, "index.html");
     parser.convertFile(
       fullFilePath,
       outputFile,
