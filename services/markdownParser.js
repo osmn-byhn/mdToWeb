@@ -82,23 +82,30 @@ class MarkdownParser {
         bodyClasses = "bg-gray-900 text-white";
         themeToggle = `<i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-xl"></i>`;
       }
+
       if (mulitLang.length > 0) {
         themeToggle = `
-        <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 ">
-          <i id="theme-toggle" class="bi bi-sun text-xl"></i>
-          <select class="text-black dark:text-white text-xl">
-            ${languages
-              .map(
-                (lang) =>
-                  `<option value="${lang.langCode}">${lang.langCode}</option>`
-              )
-              .join("")}
-          </select>
-        </div>`;
-        htmlContent = ` ${languages
-          .map((lang) => `<div lang="${lang.langCode}">${this.parse(
-                    fs.readFileSync(lang.filePath, "utf-8")
-                  )}</div>`)
+  <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2">
+    <i id="theme-toggle" class="bi bi-sun text-xl"></i>
+    <select id="language-select" class="text-black dark:text-white text-xl">
+      ${languages
+        .map(
+          (lang, index) =>
+            `<option value="${lang.langCode}" ${
+              index === 0 ? "selected" : ""
+            }>${lang.langCode}</option>`
+        )
+        .join("")}
+    </select>
+  </div>`;
+
+        htmlContent = `${languages
+          .map(
+            (lang, index) =>
+              `<div lang="${lang.langCode}" class="lang-content ${
+                index !== 0 ? "hidden" : ""
+              }">${this.parse(fs.readFileSync(lang.filePath, "utf-8"))}</div>`
+          )
           .join("")}`;
       }
       if (author !== "") {
@@ -108,31 +115,49 @@ class MarkdownParser {
         bodyClasses = "bg-gray-100 text-black dark:bg-gray-900 dark:text-white";
       }
       let toggleHTML = `
-        ${themeToggle}
-        <script>
-          const toggleButton = document.getElementById("theme-toggle");
-          toggleButton.addEventListener("click", () => {
-            if (document.body.classList.contains("bg-white")) {
-              document.body.classList.remove("bg-white", "text-black");
-              document.body.classList.add("bg-gray-900", "text-white");
-              toggleButton.classList.remove("bi-sun");
-              toggleButton.classList.add("bi-moon");
-            } else {
-              document.body.classList.remove("bg-gray-900", "text-white");
-              document.body.classList.add("bg-white", "text-black");
-              toggleButton.classList.remove("bi-moon");
-              toggleButton.classList.add("bi-sun");
-            }
-          });
-          document.querySelector(".copy-btn").addEventListener("click", function () {
-            const code = document.querySelector("pre code").innerText;
-            navigator.clipboard.writeText(code);
-            const copyBtn = document.getElementById("copyBtn");
-            copyBtn.classList.remove("bi-clipboard");
-            copyBtn.classList.add("bi-clipboard-check");
-          });
-        </script>
-      `;
+  ${themeToggle}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const toggleButton = document.getElementById("theme-toggle");
+      const languageSelect = document.getElementById("language-select");
+      const langDivs = document.querySelectorAll(".lang-content");
+
+      // Dil seçimi değiştiğinde
+      languageSelect.addEventListener("change", function () {
+        const selectedLang = this.value;
+        langDivs.forEach(div => {
+          if (div.getAttribute("lang") === selectedLang) {
+            div.classList.remove("hidden");
+          } else {
+            div.classList.add("hidden");
+          }
+        });
+      });
+
+      toggleButton.addEventListener("click", () => {
+        if (document.body.classList.contains("bg-white")) {
+          document.body.classList.remove("bg-white", "text-black");
+          document.body.classList.add("bg-gray-900", "text-white");
+          toggleButton.classList.remove("bi-sun");
+          toggleButton.classList.add("bi-moon");
+        } else {
+          document.body.classList.remove("bg-gray-900", "text-white");
+          document.body.classList.add("bg-white", "text-black");
+          toggleButton.classList.remove("bi-moon");
+          toggleButton.classList.add("bi-sun");
+        }
+      });
+
+      document.querySelector(".copy-btn").addEventListener("click", function () {
+        const code = document.querySelector("pre code").innerText;
+        navigator.clipboard.writeText(code);
+        const copyBtn = document.getElementById("copyBtn");
+        copyBtn.classList.remove("bi-clipboard");
+        copyBtn.classList.add("bi-clipboard-check");
+      });
+    });
+  </script>
+`;
       if (template === "Basic") {
         const templatePath = path.join("consts/themes/basic.html");
         if (fs.existsSync(templatePath)) {
