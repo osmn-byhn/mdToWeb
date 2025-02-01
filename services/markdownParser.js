@@ -1,9 +1,7 @@
 import fs from "fs";
 import path from "path";
-
 class MarkdownParser {
   constructor() {}
-
   parse(mdText) {
     return mdText
       .replace(/^###### (.*$)/gm, "<h6>$1</h6>")
@@ -51,7 +49,6 @@ class MarkdownParser {
       )
       .replace(/^([^<\n].*)$/gm, "<p>$1</p>");
   }
-
   convertFile(
     inputFile,
     outputFile,
@@ -60,21 +57,21 @@ class MarkdownParser {
     languages,
     title,
     author,
-    theme
+    theme,
+    links,
+    sourceLinks,
+    socialMedia
   ) {
     try {
       if (!fs.existsSync(inputFile)) {
         throw new Error(`🙅 File not found: ${inputFile}`);
       }
-
       const mdContent = fs.readFileSync(inputFile, "utf-8");
-      const htmlContent = this.parse(mdContent);
-
+      let htmlContent = this.parse(mdContent);
       let finalHtml = htmlContent;
       let bodyClasses = "";
       let themeToggle = "";
       let authorHTML = "";
-
       if (theme === "Light") {
         bodyClasses = "bg-gray-100 text-black";
       }
@@ -83,12 +80,8 @@ class MarkdownParser {
       }
       if (theme === "Light and Dark") {
         bodyClasses = "bg-gray-900 text-white";
-        themeToggle = `
-
-                <i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-xl"></i>
-            `;
+        themeToggle = `<i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-xl"></i>`;
       }
-
       if (mulitLang.length > 0) {
         themeToggle = `
         <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 ">
@@ -96,21 +89,24 @@ class MarkdownParser {
           <select class="text-black dark:text-white text-xl">
             ${languages
               .map(
-                (lang) => `<option value="${lang.langCode}">${lang.langCode}</option>`
+                (lang) =>
+                  `<option value="${lang.langCode}">${lang.langCode}</option>`
               )
               .join("")}
           </select>
         </div>`;
+        htmlContent = ` ${languages
+          .map((lang) => `<div lang="${lang.langCode}">${this.parse(
+                    fs.readFileSync(lang.filePath, "utf-8")
+                  )}</div>`)
+          .join("")}`;
       }
-
       if (author !== "") {
         authorHTML = `<p class="text-right text-black dark:text-white">Author: ${author}</p>`;
       }
-
       if (theme === "Auto Theme") {
         bodyClasses = "bg-gray-100 text-black dark:bg-gray-900 dark:text-white";
       }
-
       let toggleHTML = `
         ${themeToggle}
         <script>
@@ -137,7 +133,6 @@ class MarkdownParser {
           });
         </script>
       `;
-
       if (template === "Basic") {
         const templatePath = path.join("consts/themes/basic.html");
         if (fs.existsSync(templatePath)) {
@@ -146,7 +141,6 @@ class MarkdownParser {
             '<div id="app"></div>',
             `<div id="app">${htmlContent} ${toggleHTML} ${authorHTML}</div>`
           );
-          // Add title tag
           finalHtml = finalHtml.replace(
             "<title></title>",
             `<title>${title}</title>`
@@ -155,7 +149,6 @@ class MarkdownParser {
           throw new Error("🙅 Template file not found");
         }
       }
-
       if (template === "Navigation link") {
         const templatePath = path.join("consts/themes/navigation_link.html");
         if (fs.existsSync(templatePath)) {
@@ -164,7 +157,6 @@ class MarkdownParser {
             '<div id="app"></div>',
             `<div id="app">${htmlContent} ${toggleHTML} ${authorHTML}</div>`
           );
-          // Add title tag
           finalHtml = finalHtml.replace(
             "<title></title>",
             `<title>${title}</title>`
@@ -173,7 +165,6 @@ class MarkdownParser {
           throw new Error("🙅 Template file not found");
         }
       }
-
       if (template === "Navigation, Navbar and Footer") {
         const templatePath = path.join("consts/themes/navbar_and_footer.html");
         if (fs.existsSync(templatePath)) {
@@ -182,7 +173,6 @@ class MarkdownParser {
             '<div id="app"></div>',
             `<div id="app">${htmlContent} ${toggleHTML} ${authorHTML}</div>`
           );
-          // Add title tag
           finalHtml = finalHtml.replace(
             "<title></title>",
             `<title>${title}</title>`
@@ -192,7 +182,6 @@ class MarkdownParser {
         }
       }
       console.log(mulitLang, languages);
-
       fs.writeFileSync(outputFile, finalHtml);
       console.log(`🚀 Success created: ${outputFile}`);
     } catch (error) {
@@ -200,5 +189,4 @@ class MarkdownParser {
     }
   }
 }
-
 export default MarkdownParser;
