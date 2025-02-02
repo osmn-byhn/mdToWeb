@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { MarkdownParser } from "./MarkdownParser.js";
-
+import pkg from "js-beautify";
+const { html: beautifyHtml } = pkg;
 export class FileConverter {
   constructor() {
     this.parser = new MarkdownParser();
@@ -30,24 +31,20 @@ export class FileConverter {
       let bodyClasses = "";
       let themeToggle = "";
       let authorHTML = "";
-      let scriptCode = "";
       let themeScript = "";
-      let copyCodeScript = "";
       let langScript = "";
 
       if (theme === "Light") {
         bodyClasses = "bg-gray-100 text-black";
-        themeToggle = "";
       }
       if (theme === "Dark") {
         bodyClasses = "bg-gray-900 text-white";
-        themeToggle = "";
       }
       if (theme === "Light and Dark") {
         bodyClasses = "bg-gray-900 text-white";
         themeToggle = `<i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-xl z-[50]"></i>`;
         themeScript = `
-        const toggleButton = document.getElementById("theme-toggle");
+          const toggleButton = document.getElementById("theme-toggle");
           toggleButton.addEventListener("click", () => {
             if (document.body.classList.contains("bg-white")) {
               document.body.classList.remove("bg-white", "text-black");
@@ -64,67 +61,96 @@ export class FileConverter {
         `;
       }
 
-      if (mulitLang === true) {
+      // Çoklu dil desteği varsa her temada dil seçimi de eklenmeli
+      if (mulitLang) {
+        let langOptions = languages
+          .map(
+            (lang, index) =>
+              `<option value="${lang.langCode}" ${
+                index === 0 ? "selected" : ""
+              }>${lang.langCode}</option>`
+          )
+          .join("");
+
         themeToggle = `
-        <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
-          <i id="theme-toggle" class="bi bi-sun text-xl"></i>
-          <select id="language-select" class="text-black dark:text-white text-xl">
-            ${languages
-              .map(
-                (lang, index) =>
-                  `<option value="${lang.langCode}" ${
-                    index === 0 ? "selected" : ""
-                  }>${lang.langCode}</option>`
-              )
-              .join("")}
-          </select>
-        </div>`;
-        scriptCode = `
-        const languageSelect = document.getElementById("language-select");
-        const langDivs = document.querySelectorAll(".lang-content");
-        languageSelect.addEventListener("change", function () {
-            const selectedLang = this.value;
-            langDivs.forEach(div => {
-              if (div.getAttribute("lang") === selectedLang) {
-                div.classList.remove("hidden");
-              } else {
-                div.classList.add("hidden");
-              }
-            });
-          });`;
+          <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
+            ${
+              theme === "Light and Dark"
+                ? '<i id="theme-toggle" class="bi bi-sun text-xl"></i>'
+                : ""
+            }
+            <select id="language-select" class="text-black dark:text-white text-xl">
+              ${langOptions}
+            </select>
+          </div>`;
+
+        langScript = `
+          const languageSelect = document.getElementById("language-select");
+          const langDivs = document.querySelectorAll(".lang-content");
+          languageSelect.addEventListener("change", function () {
+              const selectedLang = this.value;
+              langDivs.forEach(div => {
+                if (div.getAttribute("lang") === selectedLang) {
+                  div.classList.remove("hidden");
+                } else {
+                  div.classList.add("hidden");
+                }
+              });
+            });`;
         htmlContent = `${languages
           .map(
             (lang, index) =>
               `<div lang="${lang.langCode}" class="lang-content ${
                 index !== 0 ? "hidden" : ""
-              }">${this.parser.parse(fs.readFileSync(lang.filePath, "utf-8"))}</div>`
+              }">${this.parser.parse(
+                fs.readFileSync(lang.filePath, "utf-8")
+              )}</div>`
           )
           .join("")}`;
-      } else {
-        themeToggle = `<i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-xl z-[50]"></i>`;
       }
+
+      if (theme === "Light and Dark") {
+        themeToggle = `
+      <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
+      <i id="theme-toggle" class="bi bi-sun text-xl"></i>
+      <select id="language-select" class="text-black dark:text-white text-xl">
+          ${languages
+            .map(
+              (lang, index) =>
+                `<option value="${lang.langCode}" ${
+                  index === 0 ? "selected" : ""
+                }>${lang.langCode}</option>`
+            )
+            .join("")}
+      </select>
+      </div>`;
+      }
+
       if (author !== "") {
         authorHTML = `<p class="text-right text-black dark:text-white">Author: ${author}</p>`;
       }
+
       if (theme === "Auto Theme") {
         bodyClasses = "bg-gray-100 text-black dark:bg-gray-900 dark:text-white";
       }
+
       let toggleHTML = `
-      ${themeToggle}
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          ${themeScript}
-          ${scriptCode}
-          document.querySelector(".copy-btn").addEventListener("click", function () {
-            const code = document.querySelector("pre code").innerText;
-            navigator.clipboard.writeText(code);
-            const copyBtn = document.getElementById("copyBtn");
-            copyBtn.classList.remove("bi-clipboard");
-            copyBtn.classList.add("bi-clipboard-check");
-          });
-        });
-      </script>
-    `;
+  ${themeToggle}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      ${themeScript}
+      ${langScript}
+      document.querySelector(".copy-btn")?.addEventListener("click", function () {
+        const code = document.querySelector("pre code").innerText;
+        navigator.clipboard.writeText(code);
+        const copyBtn = document.getElementById("copyBtn");
+        copyBtn.classList.remove("bi-clipboard");
+        copyBtn.classList.add("bi-clipboard-check");
+      });
+    });
+  </script>
+`;
+
       if (template === "Basic") {
         const templatePath = path.join("consts/themes/basic.html");
         if (fs.existsSync(templatePath)) {
@@ -186,7 +212,11 @@ export class FileConverter {
         sourceLinks,
         socialMedia
       );
-      fs.writeFileSync(outputFile, finalHtml);
+      const formattedHtml = beautifyHtml(finalHtml, {
+        indent_size: 2,
+        wrap_line_length: 80,
+      });
+      fs.writeFileSync(outputFile, formattedHtml);
       console.log(`🚀 Success created: ${outputFile}`);
     } catch (error) {
       console.error("❌ An error occurred during the process:", error.message);

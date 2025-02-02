@@ -110,7 +110,3 @@ function selamVer() {
 
 ---
 
-# HTML Desteği
-
-Kalın İtalik Altı Çizili
-
