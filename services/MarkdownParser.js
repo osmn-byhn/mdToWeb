@@ -36,6 +36,13 @@ export class MarkdownParser {
           return `<img class='rounded-md my-2' src='${src}' alt='${alt}'${widthAttr}${heightAttr}>`;
         }
       )
+      .replace(/- \[(x|X| )\] (.+)/g, (_, checked, text) => {
+        const isChecked = checked.trim().toLowerCase() === "x";
+        return `<label style="display: block;">
+                  <input type="checkbox" disabled ${isChecked ? "checked" : ""}>
+                  ${text}
+                </label>`;
+      })
       .replace(
         /\[(.*?)\]\((.*?)\)/g,
         "<a class='text-blue-500 hover:underline' href='$2'>$1</a>"
@@ -54,6 +61,7 @@ export class MarkdownParser {
         /(<ul class='list-disc pl-5'>\s*<li class="ml-\d+">.*?<\/li>)\s*<ul class='list-disc pl-5'>/gs,
         "<ul class='list-decimal pl-7'>$1"
       )
+
       .replace(/<\/ul>\n<ul class='list-disc pl-5'>/g, "")
       .replace(
         /\|(.+)\|\n\|[-:\s|]+\|\n((?:\|.*\|\n)*)/g,

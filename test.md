@@ -92,7 +92,9 @@ function selamVer() {
 
 # Kontrol Listesi
 
--
+- [x] Tamamlanmış iş 2
+- [X] Tamamlanmış iş 3
+- [ ] Yapılacak iş 4
 
 ---
 
