@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import inquirer from "inquirer";
 import { fileURLToPath } from "url";
-import MarkdownParser from "./services/markdownParser.js";
+import MDToWeb from "./services/index.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const languagesFile = path.join(__dirname, "consts", "languages.json");
@@ -168,7 +168,7 @@ prompt([
         console.log(`   - ${name}: ${url}`);
       });
     }
-    const parser = new MarkdownParser();
+    const parser = new MDToWeb();
     const outputFile = path.resolve(__dirname, "index.html");
     parser.convertFile(
       fullFilePath,
