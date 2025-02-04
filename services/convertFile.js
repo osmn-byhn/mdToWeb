@@ -7,7 +7,6 @@ export class FileConverter {
   constructor() {
     this.parser = new MarkdownParser();
   }
-
   convertFile(
     inputFile,
     outputFile,
@@ -33,7 +32,41 @@ export class FileConverter {
       let authorHTML = "";
       let themeScript = "";
       let langScript = "";
-
+      let socialMediasHTML = "";
+      let sourceLinksHTML = "";
+      if (sourceLinks.length > 0) {
+        sourceLinksHTML = `
+          <div class="flex gap-2">
+            ${sourceLinks
+              .map(
+                (source) =>
+                  `<a href="${source.url}" target="_blank" class="text-black dark:text-white">
+                    <i class="bi bi-link
+                    "></i>
+                    <span>${source.name}</span>
+                  </a>`
+              )
+              .join("")}
+          </div>`;
+      } else {
+        sourceLinksHTML = "";
+      }
+      if (socialMedia.length > 0) {
+        socialMediasHTML = `
+          <div class="flex gap-2">
+            ${socialMedia
+              .map(
+                (social) =>
+                  `<a href="${social.url}" target="_blank" class="text-black dark:text-white flex gap-2">
+                    <i class="bi ${social.icon}"></i>
+                    <span>${social.name}</span>
+                  </a>`
+              )
+              .join("")}
+          </div>`;
+      }else {
+        socialMediasHTML = "";
+      }
       if (theme === "Light") {
         bodyClasses = "bg-gray-100 text-black";
       }
@@ -60,8 +93,6 @@ export class FileConverter {
           });
         `;
       }
-
-      // Çoklu dil desteği varsa her temada dil seçimi de eklenmeli
       if (mulitLang) {
         let langOptions = languages
           .map(
@@ -83,7 +114,6 @@ export class FileConverter {
               ${langOptions}
             </select>
           </div>`;
-
         langScript = `
           const languageSelect = document.getElementById("language-select");
           const langDivs = document.querySelectorAll(".lang-content");
@@ -108,7 +138,6 @@ export class FileConverter {
           )
           .join("")}`;
       }
-
       if (theme === "Light and Dark") {
         themeToggle = `
       <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
@@ -125,39 +154,35 @@ export class FileConverter {
       </select>
       </div>`;
       }
-
       if (author !== "") {
         authorHTML = `<p class="text-right text-black dark:text-white">Author: ${author}</p>`;
       }
-
       if (theme === "Auto Theme") {
         bodyClasses = "bg-gray-100 text-black dark:bg-gray-900 dark:text-white";
       }
-
       let toggleHTML = `
-  ${themeToggle}
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      ${themeScript}
-      ${langScript}
-      document.querySelector(".copy-btn")?.addEventListener("click", function () {
-        const code = document.querySelector("pre code").innerText;
-        navigator.clipboard.writeText(code);
-        const copyBtn = document.getElementById("copyBtn");
-        copyBtn.classList.remove("bi-clipboard");
-        copyBtn.classList.add("bi-clipboard-check");
-      });
-    });
-  </script>
-`;
-
+      ${themeToggle}
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          ${themeScript}
+          ${langScript}
+          document.querySelector(".copy-btn")?.addEventListener("click", function () {
+            const code = document.querySelector("pre code").innerText;
+            navigator.clipboard.writeText(code);
+            const copyBtn = document.getElementById("copyBtn");
+            copyBtn.classList.remove("bi-clipboard");
+            copyBtn.classList.add("bi-clipboard-check");
+          });
+        });
+      </script>
+    `;
       if (template === "Basic") {
         const templatePath = path.join("consts/themes/basic.html");
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class=" w-full lg:max-w-[800px] ">${htmlContent} ${toggleHTML} ${authorHTML}</div>`
+            `<div id="app" class=" w-full lg:max-w-[800px] ">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML} </div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -173,7 +198,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class=" w-full lg:max-w-[800px] ">${htmlContent} ${toggleHTML} ${authorHTML}</div>`
+            `<div id="app" class=" w-full lg:max-w-[800px] ">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -189,7 +214,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class=" w-full lg:max-w-[800px] ">${htmlContent} ${toggleHTML} ${authorHTML}</div>`
+            `<div id="app" class=" w-full lg:max-w-[800px] ">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",

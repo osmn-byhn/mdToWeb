@@ -3,6 +3,7 @@ import path from "path";
 import inquirer from "inquirer";
 import { fileURLToPath } from "url";
 import MDToWeb from "./services/index.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const languagesFile = path.join(__dirname, "consts", "languages.json");
@@ -22,7 +23,9 @@ const socialMediaPlatforms = [
   { name: "Web", value: "web", icon: "bi-globe-americas" },
   { name: "Other", value: "other", icon: "bi-link-45deg" },
 ];
+
 const prompt = inquirer.createPromptModule();
+
 prompt([
   { name: "title", message: "Docs title?", default: "Example Title" },
   { name: "author", message: "Author?", default: "John Doe" },
@@ -51,8 +54,8 @@ prompt([
     message: "Select the languages you want to use:",
     type: "checkbox",
     choices: languageChoices,
-    when: (answers) => answers.multiLang, 
-  },  
+    when: (answers) => answers.multiLang,
+  },
   {
     name: "links",
     message: "Do you add social media links?",
@@ -73,23 +76,29 @@ prompt([
     when: (answers) => answers.links,
   },
 ]).then(async (answers) => {
-  let socialLinks = {};
-  let sourceLinks = {};
+  let socialLinks = [];
+  let sourceLinks = [];
   let langAnswers = {};
 
   if (answers.links && answers.socialMedia.length > 0) {
-    for (const platform of answers.socialMedia) {
+    for (const platformValue of answers.socialMedia) {
+      const platform = socialMediaPlatforms.find(p => p.value === platformValue);
       const { url } = await prompt([
         {
           name: "url",
-          message: `Enter URL for ${platform}:`,
-          validate: (input) =>
-            input.startsWith("http") ? true : "Enter a valid URL.",
+          message: `Enter URL for ${platform.name}:`,
+          validate: (input) => input.startsWith("http") ? true : "Enter a valid URL.",
         },
       ]);
-      socialLinks[platform] = url;
+      socialLinks.push({
+        name: platform.name,
+        url,
+        value: platform.value,
+        icon: platform.icon,
+      });
     }
   }
+
   if (answers.sourceLinks) {
     console.log("\n📜 Kaynakça eklemek için aşağıdaki bilgileri girin.");
     console.log('Çıkmak için "q" tuşuna basın.\n');
@@ -105,18 +114,17 @@ prompt([
         {
           name: "url",
           message: `URL (${name}):`,
-          validate: (input) =>
-            input.startsWith("http") ? true : "Enter a valid URL.",
+          validate: (input) => input.startsWith("http") ? true : "Enter a valid URL.",
         },
       ]);
-      sourceLinks[name] = url;
+      sourceLinks.push({ name, url });
     }
   }
+
   let files = [];
   if (answers.multiLang) {
     for (const langCode of answers.language) {
-      const langName =
-        languages.find((lang) => lang.code === langCode)?.name || langCode;
+      const langName = languages.find((lang) => lang.code === langCode)?.name || langCode;
       const langAnswers = await prompt([
         {
           name: "filePath",
@@ -144,29 +152,12 @@ prompt([
       filePath: `${filePath}.md`,
     });
   }
+
   files.forEach(({ langCode, docName, filePath }) => {
     const fullFilePath = path.join(__dirname, filePath);
     if (!fs.existsSync(fullFilePath)) {
       console.error(`❌ File not found: ${fullFilePath}`);
       return;
-    }
-    console.log(`✅ File found: ${fullFilePath}`);
-    console.log(`⭕ Docs Title: ${docName}`);
-    console.log(`👨‍💻 Docs Author: ${answers.author}`);
-    console.log(`📦 Template: ${answers.template}`);
-    console.log(`🌕 Theme: ${answers.theme}`);
-    console.log(`📁 File Path: ${fullFilePath}`);
-    if (answers.links) {
-      console.log("🔗 Social Media Links:");
-      Object.entries(socialLinks).forEach(([platform, url]) => {
-        console.log(`   - ${platform}: ${url}`);
-      });
-    }
-    if (answers.sourceLinks) {
-      console.log("📜 Sources:");
-      Object.entries(sourceLinks).forEach(([name, url]) => {
-        console.log(`   - ${name}: ${url}`);
-      });
     }
     const parser = new MDToWeb();
     const outputFile = path.resolve(__dirname, "index.html");
