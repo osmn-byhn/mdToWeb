@@ -11,7 +11,7 @@ export class FileConverter {
     inputFile,
     outputFile,
     template,
-    mulitLang,
+    multiLang,
     languages,
     title,
     author,
@@ -41,9 +41,8 @@ export class FileConverter {
               .map(
                 (source) =>
                   `<a href="${source.url}" target="_blank" class="text-black dark:text-white">
-                    <i class="bi bi-link
-                    "></i>
-                    <span>${source.name}</span>
+                    <i class="bi bi-link text-black dark:text-white"></i>
+                    <span class="text-black dark:text-white">${source.name}</span>
                   </a>`
               )
               .join("")}
@@ -57,9 +56,9 @@ export class FileConverter {
             ${socialMedia
               .map(
                 (social) =>
-                  `<a href="${social.url}" target="_blank" class="text-black dark:text-white flex gap-2">
-                    <i class="bi ${social.icon}"></i>
-                    <span>${social.name}</span>
+                  `<a href="${social.url}" target="_blank" class=" flex gap-2">
+                    <i class="bi ${social.icon} text-black dark:text-white"></i>
+                    <span class="text-black dark:text-white">${social.name}</span>
                   </a>`
               )
               .join("")}
@@ -93,7 +92,7 @@ export class FileConverter {
           });
         `;
       }
-      if (mulitLang) {
+      if (multiLang) {
         let langOptions = languages
           .map(
             (lang, index) =>
@@ -140,20 +139,20 @@ export class FileConverter {
       }
       if (theme === "Light and Dark") {
         themeToggle = `
-      <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
-      <i id="theme-toggle" class="bi bi-sun text-xl"></i>
-      <select id="language-select" class="text-black dark:text-white text-xl">
-          ${languages
-            .map(
-              (lang, index) =>
-                `<option value="${lang.langCode}" ${
-                  index === 0 ? "selected" : ""
-                }>${lang.langCode}</option>`
-            )
-            .join("")}
-      </select>
-      </div>`;
-      }
+          <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
+          <i id="theme-toggle" class="bi bi-sun text-xl"></i>
+          <select id="language-select" class="text-black dark:text-white text-xl">
+              ${languages
+                .map(
+                  (lang, index) =>
+                    `<option value="${lang.langCode}" ${
+                      index === 0 ? "selected" : ""
+                    }>${lang.langCode}</option>`
+                )
+                .join("")}
+          </select>
+          </div>`;
+        }
       if (author !== "") {
         authorHTML = `<p class="text-right text-black dark:text-white">Author: ${author}</p>`;
       }
@@ -208,6 +207,11 @@ export class FileConverter {
           throw new Error("🙅 Template file not found");
         }
       }
+      finalHtml = finalHtml.replace(
+        "<body>",
+        `<body class="${bodyClasses}">`
+      );
+      
       if (template === "Navigation, Navbar and Footer") {
         const templatePath = path.join("consts/themes/navbar_and_footer.html");
         if (fs.existsSync(templatePath)) {
@@ -225,17 +229,17 @@ export class FileConverter {
         }
       }
       console.log(
-        inputFile,
-        outputFile,
-        template,
-        mulitLang,
-        languages,
-        title,
-        author,
-        theme,
-        links,
-        sourceLinks,
-        socialMedia
+        "inputFile", inputFile,
+        "outputFile", outputFile,
+        "template", template,
+        "multiLang", multiLang,
+        "languages", languages,
+        "title", title,
+        "author", author,
+        "theme", theme,
+        "links", links,
+        "sourceLinks", sourceLinks,
+        "socialMedia", socialMedia
       );
       const formattedHtml = beautifyHtml(finalHtml, {
         indent_size: 2,

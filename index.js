@@ -161,11 +161,26 @@ prompt([
     }
     const parser = new MDToWeb();
     const outputFile = path.resolve(__dirname, "index.html");
+    console.log(answers)
+    console.log(
+      "fullFilePath", fullFilePath,
+      "outputFile", outputFile,
+      "template", answers.template,
+      "language", answers.language,
+      "files", files,
+      "title", answers.title,
+      "author", answers.author,
+      "theme", answers.theme,
+      "links", answers.links,
+      "sourceLinks", sourceLinks,
+      "socialLinks", socialLinks
+    );
+    
     parser.convertFile(
       fullFilePath,
       outputFile,
       answers.template,
-      answers.language,
+      answers.multiLang,
       files,
       answers.title,
       answers.author,
