@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+    integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Example Title</title>
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css"
+    rel="stylesheet" />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+    rel="stylesheet" />
+</head>
+
+<body class="bg-gray-900 text-white">
+  <div id="app" class=" w-full lg:max-w-[800px] ">
+    <div lang="aa" class="lang-content ">
+      <h1 class='text-3xl font-bold my-1'>Headings</h1>
+
+      <h1 class='text-3xl font-bold my-1'>Başlık 1</h1>
+
+      <h2 class='text-2xl font-bold my-1'>Başlık 2</h2>
+
+      <h3 class='text-xl font-semibold my-1'>Başlık 3</h3>
+
+      <h4 class='text-lg font-normal my-1'>Başlık 4</h4>
+
+      <h5 class='text-md font-normal my-1'>Başlık 5</h5>
+
+      <h6 class='text-md font-normal my-1'>Başlık 6</h6>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Metin Biçimlendirme</h1>
+
+      <b class='font-bold'>Kalın Metin</b>\
+      <i class='italic'>İtalik Metin</i>\
+      <del class='line-through'>Üstü Çizili Metin</del>\
+      <b class='font-bold'><i class='italic'>Kalın ve İtalik</b></i>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Listeleme</h1>
+
+      <h2 class='text-2xl font-bold my-1'>Sırasız Liste</h2>
+      <ul class='list-disc pl-5'>
+        <li>Öğe 1</li>
+        <li>Öğe 2</li>
+        <li>Alt Öğesi 1</li>
+        <li>Alt Öğesi 2</li>
+        <li>Öğe 3</li>
+      </ul>
+
+      <h2 class='text-2xl font-bold my-1'>Sıralı Liste</h2>
+
+      <ul class='list-disc pl-5'>
+        <li class="ml-0">İlk Öğesi</li>
+        <li class="ml-0">İkinci Öğesi</li>
+        <li class="ml-6">Alt Öğesi 1</li>
+        <li class="ml-6">Alt Öğesi 2</li>
+        <li class="ml-0">Üçüncü Öğesi</li>
+      </ul>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Bağlantılar</h1>
+
+      <a class='text-blue-500 hover:underline'
+        href='https://www.google.com'>Google'a Git</a>
+
+      <a class='text-blue-500 hover:underline'
+        href='https://www.google.com'>https://www.google.com</a>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Görseller</h1>
+      <img class='rounded-md my-2'
+        src='https://www.osmanbeyhan.com/assets/osmanbeyhan-l81R60ZZ.jpg?width=600x&height=600'
+        alt='Resim Açıklaması' width='300px' height='200px'>
+
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Kod Blokları</h1>
+
+      <h2 class='text-2xl font-bold my-1'>Satır içi kod</h2>
+
+      <code class='bg-gray-200 px-1 rounded'>console.log('Merhaba
+        Dünya!');</code>
+
+      <h2 class='text-2xl font-bold my-1'>Blok kod</h2>
+
+      <div class='code-container relative rounded-lg p-4 overflow-auto mt-2'>
+        <button
+          class='copy-btn absolute top-3 right-3 bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-3 py-1 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition m-[25px] z-[10]'><i
+            id='copyBtn' class='bi bi-clipboard'></i></button>
+        <pre class='line-numbers'><code class='language-javascript'>function selamVer() {
+  console.log("Merhaba Dünya!");
+}
+</code></pre>
+      </div>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Alıntılar</h1>
+
+      <blockquote class='border-l-4 border-gray-500 pl-4 italic'>Bu bir
+        alıntıdır.</blockquote>
+      >
+      <blockquote class='border-l-4 border-gray-500 pl-4 italic'>- Alıntı Sahibi
+      </blockquote>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Tablolar</h1>
+
+
+      <div class='overflow-x-auto my-4'>
+        <table class='table-auto w-full border border-gray-700'>
+          <thead>
+            <tr>
+              <th class='p-2 border border-gray-700 bg-gray-800 text-white'>
+                Başlık 1</th>
+              <th class='p-2 border border-gray-700 bg-gray-800 text-white'>
+                Başlık 2</th>
+              <th class='p-2 border border-gray-700 bg-gray-800 text-white'>
+                Başlık 3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class='bg-gray-100'>
+              <td class='p-2 border border-gray-700 text-center'>Veri 1</td>
+              <td class='p-2 border border-gray-700 text-center'>Veri 2</td>
+              <td class='p-2 border border-gray-700 text-center'>Veri 3</td>
+            </tr>
+            <tr class='bg-gray-200'>
+              <td class='p-2 border border-gray-700 text-center'>Veri 4</td>
+              <td class='p-2 border border-gray-700 text-center'>Veri 5</td>
+              <td class='p-2 border border-gray-700 text-center'>Veri 6</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Kontrol Listesi</h1>
+
+      <label style="display: block;">
+        <input type="checkbox" disabled checked>
+        Tamamlanmış iş 2
+      </label>
+      <label style="display: block;">
+        <input type="checkbox" disabled checked>
+        Tamamlanmış iş 3
+      </label>
+      <label style="display: block;">
+        <input type="checkbox" disabled>
+        Yapılacak iş 4
+      </label>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Kaçış Karakterleri</h1>
+
+      \<i class='italic'>Yıldız\</i> #Başlık [Köşeli Parantez]
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Emoji</h1>
+
+      🚀 🌟 🎉 ✅
+
+      <hr class='border-gray-300 my-4'>
+
+    </div>
+    <div lang="ab" class="lang-content hidden">
+      <h1 class='text-3xl font-bold my-1'>Başlıklar</h1>
+
+      <h1 class='text-3xl font-bold my-1'>Başlık 1</h1>
+
+      <h2 class='text-2xl font-bold my-1'>Başlık 2</h2>
+
+      <h3 class='text-xl font-semibold my-1'>Başlık 3</h3>
+
+      <h4 class='text-lg font-normal my-1'>Başlık 4</h4>
+
+      <h5 class='text-md font-normal my-1'>Başlık 5</h5>
+
+      <h6 class='text-md font-normal my-1'>Başlık 6</h6>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Metin Biçimlendirme</h1>
+
+      <b class='font-bold'>Kalın Metin</b>\
+      <i class='italic'>İtalik Metin</i>\
+      <del class='line-through'>Üstü Çizili Metin</del>\
+      <b class='font-bold'><i class='italic'>Kalın ve İtalik</b></i>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Listeleme</h1>
+
+      <h2 class='text-2xl font-bold my-1'>Sırasız Liste</h2>
+      <ul class='list-disc pl-5'>
+        <li>Öğe 1</li>
+        <li>Öğe 2</li>
+        <li>Alt Öğesi 1</li>
+        <li>Alt Öğesi 2</li>
+        <li>Öğe 3</li>
+      </ul>
+
+      <h2 class='text-2xl font-bold my-1'>Sıralı Liste</h2>
+
+      <ul class='list-disc pl-5'>
+        <li class="ml-0">İlk Öğesi</li>
+        <li class="ml-0">İkinci Öğesi</li>
+        <li class="ml-6">Alt Öğesi 1</li>
+        <li class="ml-6">Alt Öğesi 2</li>
+        <li class="ml-0">Üçüncü Öğesi</li>
+      </ul>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Bağlantılar</h1>
+
+      <a class='text-blue-500 hover:underline'
+        href='https://www.google.com'>Google'a Git</a>
+
+      <a class='text-blue-500 hover:underline'
+        href='https://www.google.com'>https://www.google.com</a>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Görseller</h1>
+      <img class='rounded-md my-2'
+        src='https://www.osmanbeyhan.com/assets/osmanbeyhan-l81R60ZZ.jpg?width=600x&height=600'
+        alt='Resim Açıklaması' width='300px' height='200px'>
+
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Kod Blokları</h1>
+
+      <h2 class='text-2xl font-bold my-1'>Satır içi kod</h2>
+
+      <code class='bg-gray-200 px-1 rounded'>console.log('Merhaba
+        Dünya!');</code>
+
+      <h2 class='text-2xl font-bold my-1'>Blok kod</h2>
+
+      <div class='code-container relative rounded-lg p-4 overflow-auto mt-2'>
+        <button
+          class='copy-btn absolute top-3 right-3 bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-3 py-1 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition m-[25px] z-[10]'><i
+            id='copyBtn' class='bi bi-clipboard'></i></button>
+        <pre class='line-numbers'><code class='language-javascript'>function selamVer() {
+  console.log("Merhaba Dünya!");
+}
+</code></pre>
+      </div>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Alıntılar</h1>
+
+      <blockquote class='border-l-4 border-gray-500 pl-4 italic'>Bu bir
+        alıntıdır.</blockquote>
+      >
+      <blockquote class='border-l-4 border-gray-500 pl-4 italic'>- Alıntı Sahibi
+      </blockquote>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Tablolar</h1>
+
+
+      <div class='overflow-x-auto my-4'>
+        <table class='table-auto w-full border border-gray-700'>
+          <thead>
+            <tr>
+              <th class='p-2 border border-gray-700 bg-gray-800 text-white'>
+                Başlık 1</th>
+              <th class='p-2 border border-gray-700 bg-gray-800 text-white'>
+                Başlık 2</th>
+              <th class='p-2 border border-gray-700 bg-gray-800 text-white'>
+                Başlık 3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class='bg-gray-100'>
+              <td class='p-2 border border-gray-700 text-center'>Veri 1</td>
+              <td class='p-2 border border-gray-700 text-center'>Veri 2</td>
+              <td class='p-2 border border-gray-700 text-center'>Veri 3</td>
+            </tr>
+            <tr class='bg-gray-200'>
+              <td class='p-2 border border-gray-700 text-center'>Veri 4</td>
+              <td class='p-2 border border-gray-700 text-center'>Veri 5</td>
+              <td class='p-2 border border-gray-700 text-center'>Veri 6</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Kontrol Listesi</h1>
+
+      <label style="display: block;">
+        <input type="checkbox" disabled checked>
+        Tamamlanmış iş 2
+      </label>
+      <label style="display: block;">
+        <input type="checkbox" disabled checked>
+        Tamamlanmış iş 3
+      </label>
+      <label style="display: block;">
+        <input type="checkbox" disabled>
+        Yapılacak iş 4
+      </label>
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Kaçış Karakterleri</h1>
+
+      \<i class='italic'>Yıldız\</i> #Başlık [Köşeli Parantez]
+
+      <hr class='border-gray-300 my-4'>
+
+      <h1 class='text-3xl font-bold my-1'>Emoji</h1>
+
+      🚀 🌟 🎉 ✅
+
+      <hr class='border-gray-300 my-4'>
+
+    </div>
+
+    <div
+      class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
+
+      <select id="language-select" class="text-black dark:text-white text-xl">
+        <option value="aa" selected>aa</option>
+        <option value="ab">ab</option>
+      </select>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+
+
+        const languageSelect = document.getElementById("language-select");
+        const langDivs = document.querySelectorAll(".lang-content");
+        languageSelect.addEventListener("change", function() {
+          const selectedLang = this.value;
+          langDivs.forEach(div => {
+            if (div.getAttribute("lang") === selectedLang) {
+              div.classList.remove("hidden");
+            } else {
+              div.classList.add("hidden");
+            }
+          });
+        });
+        document.querySelector(".copy-btn")?.addEventListener("click",
+          function() {
+            const code = document.querySelector("pre code").innerText;
+            navigator.clipboard.writeText(code);
+            const copyBtn = document.getElementById("copyBtn");
+            copyBtn.classList.remove("bi-clipboard");
+            copyBtn.classList.add("bi-clipboard-check");
+          });
+      });
+    </script>
+    <p class="text-right text-black dark:text-white">Author: John Doe</p>
+  </div>
+  <hr class="mt-10" />
+  <div class="my-5">
+    <p class="text-center">
+      <span class="">❤️ Make via</span>
+      <a href="https://www.mdtoweb.osmanbeyhan.com/"
+        class="text-blue-600">MDtoWeb</a>
+    </p>
+  </div>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js">
+  </script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js">
+  </script>
+</body>
+
+</html>

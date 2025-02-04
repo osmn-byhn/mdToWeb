@@ -29,6 +29,7 @@ export class FileConverter {
       let finalHtml = htmlContent;
       let bodyClasses = "";
       let themeToggle = "";
+      let toggleHTMLCode = "";
       let authorHTML = "";
       let themeScript = "";
       let langScript = "";
@@ -92,7 +93,7 @@ export class FileConverter {
           });
         `;
       }
-      if (multiLang) {
+      if (typeof multiLang !== "undefined" && multiLang) {
         let langOptions = languages
           .map(
             (lang, index) =>
@@ -141,16 +142,6 @@ export class FileConverter {
         themeToggle = `
           <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
           <i id="theme-toggle" class="bi bi-sun text-xl"></i>
-          <select id="language-select" class="text-black dark:text-white text-xl">
-              ${languages
-                .map(
-                  (lang, index) =>
-                    `<option value="${lang.langCode}" ${
-                      index === 0 ? "selected" : ""
-                    }>${lang.langCode}</option>`
-                )
-                .join("")}
-          </select>
           </div>`;
         }
       if (author !== "") {
