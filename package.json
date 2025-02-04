@@ -1,6 +1,6 @@
 {
   "name": "mdtoweb-cli",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "md to web",
   "main": "index.js",
   "scripts": {
