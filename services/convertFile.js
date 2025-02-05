@@ -171,7 +171,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class=" w-full lg:max-w-[800px] ">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML} </div>`
+            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML} </div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -187,7 +187,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class=" w-full lg:max-w-[800px] ">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
+            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -208,7 +208,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class=" w-full lg:max-w-[800px] ">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
+            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",

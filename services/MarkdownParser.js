@@ -7,11 +7,11 @@ export class MarkdownParser {
         /^###### (.*)$/gm,
         "<h6 class='text-md font-normal my-1'>$1</h6>"
       )
-      .replace(/^##### (.*)$/gm, "<h5 class='text-md font-normal my-1'>$1</h5>")
-      .replace(/^#### (.*)$/gm, "<h4 class='text-lg font-normal my-1'>$1</h4>")
-      .replace(/^### (.*)$/gm, "<h3 class='text-xl font-semibold my-1'>$1</h3>")
-      .replace(/^## (.*)$/gm, "<h2 class='text-2xl font-bold my-1'>$1</h2>")
-      .replace(/^# (.*)$/gm, "<h1 class='text-3xl font-bold my-1'>$1</h1>")
+      .replace(/^##### (.*)$/gm, "<h5 class='text-md font-normal my-1 !text-gray-600 dark:!text-gray-100'>$1</h5>")
+      .replace(/^#### (.*)$/gm, "<h4 class='text-lg font-normal my-1 !text-gray-600 dark:!text-gray-100'>$1</h4>")
+      .replace(/^### (.*)$/gm, "<h3 class='text-xl font-semibold my-1 !text-gray-600 dark:!text-gray-100'>$1</h3>")
+      .replace(/^## (.*)$/gm, "<h2 class='text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100'>$1</h2>")
+      .replace(/^# (.*)$/gm, "<h1 class='text-3xl font-bold my-1 !text-gray-600 dark:!text-gray-100'>$1</h1>")
       .replace(/\*\*(.*?)\*\*/g, "<b class='font-bold'>$1</b>")
       .replace(/\*(.*?)\*/g, "<i class='italic'>$1</i>")
       .replace(/~~(.*?)~~/g, "<del class='line-through'>$1</del>")
