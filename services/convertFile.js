@@ -29,7 +29,6 @@ export class FileConverter {
       let finalHtml = htmlContent;
       let bodyClasses = "";
       let themeToggle = "";
-      let toggleHTMLCode = "";
       let authorHTML = "";
       let themeScript = "";
       let langScript = "";
@@ -41,9 +40,9 @@ export class FileConverter {
             ${sourceLinks
               .map(
                 (source) =>
-                  `<a href="${source.url}" target="_blank" class="text-black dark:text-white">
-                    <i class="bi bi-link text-black dark:text-white"></i>
-                    <span class="text-black dark:text-white">${source.name}</span>
+                  `<a href="${source.url}" target="_blank" class="">
+                    <i class="bi bi-link-45deg"></i>
+                    <span class="">${source.name}</span>
                   </a>`
               )
               .join("")}
@@ -58,8 +57,8 @@ export class FileConverter {
               .map(
                 (social) =>
                   `<a href="${social.url}" target="_blank" class=" flex gap-2">
-                    <i class="bi ${social.icon} text-black dark:text-white"></i>
-                    <span class="text-black dark:text-white">${social.name}</span>
+                    <i class="bi ${social.icon} "></i>
+                    <span class="">${social.name}</span>
                   </a>`
               )
               .join("")}
@@ -167,7 +166,7 @@ export class FileConverter {
       </script>
     `;
       if (template === "Basic") {
-        const templatePath = path.join("consts/themes/basic.html");
+        const templatePath = path.join("consts/templates/basic.html");
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
@@ -183,7 +182,7 @@ export class FileConverter {
         }
       }
       if (template === "Navigation link") {
-        const templatePath = path.join("consts/themes/navigation_link.html");
+        const templatePath = path.join("consts/templates/navigation_link.html");
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
@@ -204,7 +203,7 @@ export class FileConverter {
       );
       
       if (template === "Navigation, Navbar and Footer") {
-        const templatePath = path.join("consts/themes/navbar_and_footer.html");
+        const templatePath = path.join("consts/templates/navbar_and_footer.html");
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(

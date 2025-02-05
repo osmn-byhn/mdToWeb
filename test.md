@@ -76,7 +76,6 @@ function selamVer() {
 # Alıntılar
 
 > Bu bir alıntıdır.
->
 > - Alıntı Sahibi
 
 ---
