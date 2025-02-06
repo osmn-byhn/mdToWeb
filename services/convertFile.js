@@ -63,7 +63,7 @@ export class FileConverter {
               )
               .join("")}
           </div>`;
-      }else {
+      } else {
         socialMediasHTML = "";
       }
       if (theme === "Light") {
@@ -73,22 +73,25 @@ export class FileConverter {
         bodyClasses = "bg-gray-900 text-white";
       }
       if (theme === "Light and Dark") {
-        bodyClasses = "bg-gray-900 text-white";
+        bodyClasses = "bg-white text-black dark:bg-gray-900 dark:text-white";
         themeToggle = `<i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-xl z-[50]"></i>`;
         themeScript = `
           const toggleButton = document.getElementById("theme-toggle");
-          toggleButton.addEventListener("click", () => {
-            if (document.body.classList.contains("bg-white")) {
-              document.body.classList.remove("bg-white", "text-black");
-              document.body.classList.add("bg-gray-900", "text-white");
-              toggleButton.classList.remove("bi-sun");
-              toggleButton.classList.add("bi-moon");
-            } else {
-              document.body.classList.remove("bg-gray-900", "text-white");
-              document.body.classList.add("bg-white", "text-black");
+          function updateIcon() {
+            if (document.documentElement.classList.contains("dark")) {
               toggleButton.classList.remove("bi-moon");
               toggleButton.classList.add("bi-sun");
+            } else {
+              toggleButton.classList.remove("bi-sun");
+              toggleButton.classList.add("bi-moon");
             }
+          }
+          updateIcon();
+          toggleButton?.addEventListener("click", () => {
+            document.documentElement.classList.toggle("dark");
+            const isDarkMode = document.documentElement.classList.contains("dark");
+            localStorage.setItem("color-theme", isDarkMode ? "dark" : "light");
+            updateIcon();
           });
         `;
       }
@@ -142,7 +145,7 @@ export class FileConverter {
           <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
           <i id="theme-toggle" class="bi bi-sun text-xl"></i>
           </div>`;
-        }
+      }
       if (author !== "") {
         authorHTML = `<p class="text-right text-black dark:text-white">Author: ${author}</p>`;
       }
@@ -197,13 +200,12 @@ export class FileConverter {
           throw new Error("🙅 Template file not found");
         }
       }
-      finalHtml = finalHtml.replace(
-        "<body>",
-        `<body class="${bodyClasses}">`
-      );
-      
+      finalHtml = finalHtml.replace("<body>", `<body class="${bodyClasses}">`);
+
       if (template === "Navigation, Navbar and Footer") {
-        const templatePath = path.join("consts/templates/navbar_and_footer.html");
+        const templatePath = path.join(
+          "consts/templates/navbar_and_footer.html"
+        );
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
@@ -219,17 +221,28 @@ export class FileConverter {
         }
       }
       console.log(
-        "inputFile", inputFile,
-        "outputFile", outputFile,
-        "template", template,
-        "multiLang", multiLang,
-        "languages", languages,
-        "title", title,
-        "author", author,
-        "theme", theme,
-        "links", links,
-        "sourceLinks", sourceLinks,
-        "socialMedia", socialMedia
+        "inputFile",
+        inputFile,
+        "outputFile",
+        outputFile,
+        "template",
+        template,
+        "multiLang",
+        multiLang,
+        "languages",
+        languages,
+        "title",
+        title,
+        "author",
+        author,
+        "theme",
+        theme,
+        "links",
+        links,
+        "sourceLinks",
+        sourceLinks,
+        "socialMedia",
+        socialMedia
       );
       const formattedHtml = beautifyHtml(finalHtml, {
         indent_size: 2,
