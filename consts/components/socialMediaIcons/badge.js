@@ -1,12 +1,16 @@
 export function returnSocialMediaBadge(socialLinks) {
-  return `<div class="flex gap-3">
+  return `<div class="flex flex-wrap gap-3 mt-12">
       ${socialLinks
-        .map(
-          (social) =>
-            `<a href="${social.url}" target="_blank" class=" flex gap-2 w-8 h-8 rounded-sm bg-${social.bgColor} text-white items-center justify-center">
-              <i class="bi ${social.icon} text-xl p-4"></i>
-            </a>`
-        )
+        .map((social) => {
+          const bgColor =
+            social.icon === "bi bi-instagram"
+              ? social.bgColor
+              : `[${social.bgColor}]`;
+          return `<a href="${social.url}" target="_blank" class="flex gap-2 px-3 py-2 rounded-md bg-${bgColor} text-white items-center justify-center whitespace-nowrap">
+              <i class="${social.icon} text-xl "></i>
+              <span class="text-xl">${social.name}</span>
+            </a>`;
+        })
         .join("")}
     </div>`;
 }
