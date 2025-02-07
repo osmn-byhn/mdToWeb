@@ -2,7 +2,9 @@ import fs from "fs";
 import path from "path";
 import { MarkdownParser } from "./MarkdownParser.js";
 import pkg from "js-beautify";
+import { JSDOM } from "jsdom";
 const { html: beautifyHtml } = pkg;
+import { returnSocialMedia } from "../consts/components/socialMediaIcons/index.js";
 export class FileConverter {
   constructor() {
     this.parser = new MarkdownParser();
@@ -17,8 +19,9 @@ export class FileConverter {
     author,
     theme,
     links,
+    socialMediaType,
     sourceLinks,
-    socialMedia
+    socialLinks
   ) {
     try {
       if (!fs.existsSync(inputFile)) {
@@ -34,6 +37,7 @@ export class FileConverter {
       let langScript = "";
       let socialMediasHTML = "";
       let sourceLinksHTML = "";
+      let headScript = "";
       if (sourceLinks.length > 0) {
         sourceLinksHTML = `
           <div class="flex gap-2">
@@ -50,31 +54,41 @@ export class FileConverter {
       } else {
         sourceLinksHTML = "";
       }
-      if (socialMedia.length > 0) {
-        socialMediasHTML = `
-          <div class="flex gap-2">
-            ${socialMedia
-              .map(
-                (social) =>
-                  `<a href="${social.url}" target="_blank" class=" flex gap-2">
-                    <i class="bi ${social.icon} "></i>
-                    <span class="">${social.name}</span>
-                  </a>`
-              )
-              .join("")}
-          </div>`;
+      if (links === true) {
+        socialMediasHTML = returnSocialMedia(socialLinks, socialMediaType);
       } else {
         socialMediasHTML = "";
       }
       if (theme === "Light") {
         bodyClasses = "bg-gray-100 text-black";
+        headScript = `
+          <script>
+            if (localStorage.getItem("color-theme") === "light" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: light)").matches)) {
+              document.documentElement.classList.add("light");
+            } else {
+              document.documentElement.classList.remove("light");
+            }
+          </script>  
+        `;
       }
       if (theme === "Dark") {
         bodyClasses = "bg-gray-900 text-white";
+        headScript = `
+          <script>
+            if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+              document.documentElement.classList.add("dark");
+            } else {
+              document.documentElement.classList.remove("dark");
+            }
+          </script>  
+        `;
       }
       if (theme === "Light and Dark") {
         bodyClasses = "bg-white text-black dark:bg-gray-900 dark:text-white";
-        themeToggle = `<i id="theme-toggle" class="bi bi-sun bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 text-xl z-[50]"></i>`;
+        themeToggle = `
+          <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
+            <i id="theme-toggle" class="bi bi-sun text-xl"></i>
+          </div>`;
         themeScript = `
           const toggleButton = document.getElementById("theme-toggle");
           function updateIcon() {
@@ -94,8 +108,19 @@ export class FileConverter {
             updateIcon();
           });
         `;
+        headScript = `
+          <script>
+            if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+              document.documentElement.classList.add("dark");
+            } else {
+              document.documentElement.classList.remove("dark");
+            }
+          </script>  
+        `;
       }
-      if (typeof multiLang !== "undefined" && multiLang) {
+      console.log("multiLang", multiLang);
+      
+      if (multiLang === true) {
         let langOptions = languages
           .map(
             (lang, index) =>
@@ -104,7 +129,6 @@ export class FileConverter {
               }>${lang.langCode}</option>`
           )
           .join("");
-
         themeToggle = `
           <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
             ${
@@ -112,7 +136,7 @@ export class FileConverter {
                 ? '<i id="theme-toggle" class="bi bi-sun text-xl"></i>'
                 : ""
             }
-            <select id="language-select" class="text-black dark:text-white text-xl">
+            <select id="language-select" class="bg-transparent text-black dark:text-white text-xl">
               ${langOptions}
             </select>
           </div>`;
@@ -140,12 +164,7 @@ export class FileConverter {
           )
           .join("")}`;
       }
-      if (theme === "Light and Dark") {
-        themeToggle = `
-          <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
-          <i id="theme-toggle" class="bi bi-sun text-xl"></i>
-          </div>`;
-      }
+      
       if (author !== "") {
         authorHTML = `<p class="text-right text-black dark:text-white">Author: ${author}</p>`;
       }
@@ -174,7 +193,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML} </div>`
+            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-10">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML} </div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -190,7 +209,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
+            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-10">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -201,7 +220,6 @@ export class FileConverter {
         }
       }
       finalHtml = finalHtml.replace("<body>", `<body class="${bodyClasses}">`);
-
       if (template === "Navigation, Navbar and Footer") {
         const templatePath = path.join(
           "consts/templates/navbar_and_footer.html"
@@ -210,7 +228,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
+            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-10">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -220,31 +238,11 @@ export class FileConverter {
           throw new Error("🙅 Template file not found");
         }
       }
-      console.log(
-        "inputFile",
-        inputFile,
-        "outputFile",
-        outputFile,
-        "template",
-        template,
-        "multiLang",
-        multiLang,
-        "languages",
-        languages,
-        "title",
-        title,
-        "author",
-        author,
-        "theme",
-        theme,
-        "links",
-        links,
-        "sourceLinks",
-        sourceLinks,
-        "socialMedia",
-        socialMedia
-      );
-      const formattedHtml = beautifyHtml(finalHtml, {
+      const dom = new JSDOM(finalHtml);
+      const doc = dom.window.document;
+      doc.head.insertAdjacentHTML("beforeend", headScript);
+      const updatedHtml = dom.serialize();
+      const formattedHtml = beautifyHtml(updatedHtml, {
         indent_size: 2,
         wrap_line_length: 80,
       });

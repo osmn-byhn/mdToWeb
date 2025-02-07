@@ -8,28 +8,30 @@ class MDToWeb {
     inputFile,
     outputFile,
     template,
-    mulitLang,
+    multiLang,
     languages,
     title,
     author,
     theme,
     links,
+    socialMediaType,
     sourceLinks,
-    socialMedia
+    socialLinks
   ) {
     this.converter = new FileConverter();
     converter.convertFile(
       inputFile,
       outputFile,
       template,
-      mulitLang,
+      multiLang,
       languages,
       title,
       author,
       theme,
       links,
+      socialMediaType,
       sourceLinks,
-      socialMedia
+      socialLinks
     );
   }
 }

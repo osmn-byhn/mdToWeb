@@ -1,17 +1,56 @@
 export class MarkdownParser {
   constructor() {}
-
+  slugify(text) {
+    return text
+      .toLowerCase()
+      .replace(/ğ/g, "g")
+      .replace(/ü/g, "u")
+      .replace(/ş/g, "s")
+      .replace(/ı/g, "i")
+      .replace(/ö/g, "o")
+      .replace(/ç/g, "c")
+      .replace(/[^a-z0-9 -]/g, "") // Özel karakterleri temizle
+      .replace(/\s+/g, "-") // Boşlukları tire ile değiştir
+      .replace(/-+/g, "-"); // Fazla tireleri temizle
+  }
   parse(mdText) {
     return mdText
-      .replace(
-        /^###### (.*)$/gm,
-        "<h6 class='text-md font-normal my-1'>$1</h6>"
-      )
-      .replace(/^##### (.*)$/gm, "<h5 class='text-md font-normal my-1 !text-gray-600 dark:!text-gray-100'>$1</h5>")
-      .replace(/^#### (.*)$/gm, "<h4 class='text-lg font-normal my-1 !text-gray-600 dark:!text-gray-100'>$1</h4>")
-      .replace(/^### (.*)$/gm, "<h3 class='text-xl font-semibold my-1 !text-gray-600 dark:!text-gray-100'>$1</h3>")
-      .replace(/^## (.*)$/gm, "<h2 class='text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100'>$1</h2>")
-      .replace(/^# (.*)$/gm, "<h1 class='text-3xl font-bold my-1 !text-gray-600 dark:!text-gray-100'>$1</h1>")
+      .replace(/^###### (.*)$/gm, (_, text) => {
+        const id = this.slugify(text);
+        return `<h6 id="${id}" class="text-md font-normal my-1">
+                <a href="#${id}">${text}</a>
+              </h6>`;
+      })
+      .replace(/^##### (.*)$/gm, (_, text) => {
+        const id = this.slugify(text);
+        return `<h5 id="${id}" class="text-md font-normal my-1 !text-gray-600 dark:!text-gray-100">
+                <a href="#${id}">${text}</a>
+              </h5>`;
+      })
+      .replace(/^#### (.*)$/gm, (_, text) => {
+        const id = this.slugify(text);
+        return `<h4 id="${id}" class="text-lg font-normal my-1 !text-gray-600 dark:!text-gray-100">
+                <a href="#${id}">${text}</a>
+              </h4>`;
+      })
+      .replace(/^### (.*)$/gm, (_, text) => {
+        const id = this.slugify(text);
+        return `<h3 id="${id}" class="text-xl font-semibold my-1 !text-gray-600 dark:!text-gray-100">
+                <a href="#${id}">${text}</a>
+              </h3>`;
+      })
+      .replace(/^## (.*)$/gm, (_, text) => {
+        const id = this.slugify(text);
+        return `<h2 id="${id}" class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+                <a href="#${id}">${text}</a>
+              </h2>`;
+      })
+      .replace(/^# (.*)$/gm, (_, text) => {
+        const id = this.slugify(text);
+        return `<h1 id="${id}" class="text-3xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+                <a href="#${id}">${text}</a>
+              </h1>`;
+      })
       .replace(/\*\*(.*?)\*\*/g, "<b class='font-bold'>$1</b>")
       .replace(/\*(.*?)\*/g, "<i class='italic'>$1</i>")
       .replace(/~~(.*?)~~/g, "<del class='line-through'>$1</del>")
@@ -91,7 +130,7 @@ export class MarkdownParser {
             ${cells
               .map(
                 (cell) =>
-                  `<td class='p-2 border border-gray-700 text-center'>${cell}</td>`
+                  `<td class='p-2 border border-gray-700 text-center text-black dark:text-white'>${cell}</td>`
               )
               .join("\n")}
           </tr>`;

@@ -3,7 +3,6 @@ import path from "path";
 import inquirer from "inquirer";
 import { fileURLToPath } from "url";
 import MDToWeb from "./services/index.js";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const languagesFile = path.join(__dirname, "consts", "languages.json");
@@ -13,19 +12,38 @@ const languageChoices = languages.map((lang) => ({
   value: lang.code,
 }));
 const socialMediaPlatforms = [
-  { name: "GitHub", value: "github", icon: "bi-github" },
-  { name: "Twitter", value: "twitter", icon: "bi-twitter-x" },
-  { name: "LinkedIn", value: "linkedin", icon: "bi-linkedin" },
-  { name: "Facebook", value: "facebook", icon: "bi-facebook" },
-  { name: "Instagram", value: "instagram", icon: "bi-instagram" },
-  { name: "Reddit", value: "reddit", icon: "bi-reddit" },
-  { name: "YouTube", value: "youtube", icon: "bi-youtube" },
-  { name: "Web", value: "web", icon: "bi-globe-americas" },
-  { name: "Other", value: "other", icon: "bi-link-45deg" },
+  { name: "GitHub", value: "github", icon: "bi-github", bgColor: "#080808" },
+  { name: "GitLab", value: "gitlab", icon: "bi-gitlab", bgColor: "#e2492f" },
+  {
+    name: "Twitter",
+    value: "twitter",
+    icon: "bi-twitter-x",
+    bgColor: "#080808",
+  },
+  {
+    name: "LinkedIn",
+    value: "linkedin",
+    icon: "bi-linkedin",
+    bgColor: "#126bc4",
+  },
+  {
+    name: "Facebook",
+    value: "facebook",
+    icon: "bi-facebook",
+    bgColor: "#106bff",
+  },
+  {
+    name: "Instagram",
+    value: "instagram",
+    icon: "bi-instagram",
+    bgColor: "gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045]",
+  },
+  { name: "Reddit", value: "reddit", icon: "bi-reddit", bgColor: "#ff4b08" },
+  { name: "YouTube", value: "youtube", icon: "bi-youtube", bgColor: "#fe0808" },
+  { name: "Web", value: "web", icon: "bi-globe-americas", bgColor: "#000" },
+  { name: "Other", value: "other", icon: "bi-link-45deg", bgColor: "#000" },
 ];
-
 const prompt = inquirer.createPromptModule();
-
 prompt([
   { name: "title", message: "Docs title?", default: "Example Title" },
   { name: "author", message: "Author?", default: "John Doe" },
@@ -69,6 +87,19 @@ prompt([
     default: false,
   },
   {
+    name: "socialMediaType",
+    message: "Select social media type",
+    type: "list",
+    choices: [
+      "Only Icon",
+      "Badge",
+      "Badge and Username",
+      "Vertical Icon",
+      "Header Static Icon",
+    ],
+    when: (answers) => answers.links,
+  },
+  {
     name: "socialMedia",
     message: "Select social media platforms",
     type: "checkbox",
@@ -78,35 +109,30 @@ prompt([
 ]).then(async (answers) => {
   let socialLinks = [];
   let sourceLinks = [];
-  let langAnswers = {};
-
-  if (answers.links && answers.socialMedia.length > 0) {
+  if (answers.links && answers.socialMedia?.length > 0) {
     for (const platformValue of answers.socialMedia) {
-      const platform = socialMediaPlatforms.find(p => p.value === platformValue);
+      const platform = socialMediaPlatforms.find(
+        (p) => p.value === platformValue
+      );
       const { url } = await prompt([
         {
           name: "url",
           message: `Enter URL for ${platform.name}:`,
-          validate: (input) => input.startsWith("http") ? true : "Enter a valid URL.",
+          validate: (input) =>
+            input.startsWith("http") ? true : "Enter a valid URL.",
         },
       ]);
-      socialLinks.push({
-        name: platform.name,
-        url,
-        value: platform.value,
-        icon: platform.icon,
-      });
+      socialLinks.push({ ...platform, url });
     }
   }
-
   if (answers.sourceLinks) {
-    console.log("\n📜 Kaynakça eklemek için aşağıdaki bilgileri girin.");
-    console.log('Çıkmak için "q" tuşuna basın.\n');
+    console.log("\n📜 Enter the following information to add a reference.");
+    console.log('Press the "q" key to exit.\n');
     while (true) {
       const { name } = await prompt([
         {
           name: "name",
-          message: "Kaynakça ismi:",
+          message: "Reference name:",
         },
       ]);
       if (name.toLowerCase() === "q") break;
@@ -114,17 +140,18 @@ prompt([
         {
           name: "url",
           message: `URL (${name}):`,
-          validate: (input) => input.startsWith("http") ? true : "Enter a valid URL.",
+          validate: (input) =>
+            input.startsWith("http") ? true : "Enter a valid URL.",
         },
       ]);
       sourceLinks.push({ name, url });
     }
   }
-
   let files = [];
   if (answers.multiLang) {
     for (const langCode of answers.language) {
-      const langName = languages.find((lang) => lang.code === langCode)?.name || langCode;
+      const langName =
+        languages.find((lang) => lang.code === langCode)?.name || langCode;
       const langAnswers = await prompt([
         {
           name: "filePath",
@@ -152,7 +179,6 @@ prompt([
       filePath: `${filePath}.md`,
     });
   }
-
   files.forEach(({ langCode, docName, filePath }) => {
     const fullFilePath = path.join(__dirname, filePath);
     if (!fs.existsSync(fullFilePath)) {
@@ -161,21 +187,6 @@ prompt([
     }
     const parser = new MDToWeb();
     const outputFile = path.resolve(__dirname, "index.html");
-    console.log(answers)
-    console.log(
-      "fullFilePath", fullFilePath,
-      "outputFile", outputFile,
-      "template", answers.template,
-      "language", answers.language,
-      "files", files,
-      "title", answers.title,
-      "author", answers.author,
-      "theme", answers.theme,
-      "links", answers.links,
-      "sourceLinks", sourceLinks,
-      "socialLinks", socialLinks
-    );
-    
     parser.convertFile(
       fullFilePath,
       outputFile,
@@ -186,6 +197,7 @@ prompt([
       answers.author,
       answers.theme,
       answers.links,
+      answers.socialMediaType,
       sourceLinks,
       socialLinks
     );
