@@ -36,6 +36,7 @@ export class FileConverter {
       let themeScript = "";
       let langScript = "";
       let socialMediasHTML = "";
+      let socialMediasNavbarHTML = "";
       let sourceLinksHTML = "";
       let headScript = "";
       if (sourceLinks.length > 0) {
@@ -56,6 +57,10 @@ export class FileConverter {
       }
       if (links === true) {
         socialMediasHTML = returnSocialMedia(socialLinks, socialMediaType);
+        if (socialMediaType === "Header Static Icon") {
+          socialMediasHTML = returnSocialMedia(socialLinks, socialMediaType);
+          socialMediasNavbarHTML = socialMediasHTML
+        }
       } else {
         socialMediasHTML = "";
       }
@@ -87,6 +92,7 @@ export class FileConverter {
         bodyClasses = "bg-white text-black dark:bg-gray-900 dark:text-white";
         themeToggle = `
           <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
+            ${socialMediasNavbarHTML}
             <i id="theme-toggle" class="bi bi-sun text-xl"></i>
           </div>`;
         themeScript = `
@@ -131,6 +137,7 @@ export class FileConverter {
           .join("");
         themeToggle = `
           <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
+            ${socialMediasNavbarHTML}
             ${
               theme === "Light and Dark"
                 ? '<i id="theme-toggle" class="bi bi-sun text-xl"></i>'
@@ -193,7 +200,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-10">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML} </div>`
+            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[8vh]">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""} ${sourceLinksHTML} </div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -209,7 +216,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-10">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
+            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[8vh]">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""} ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -228,7 +235,7 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-10">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediasHTML} ${sourceLinksHTML}</div>`
+            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[8vh]">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""} ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
