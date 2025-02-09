@@ -92,6 +92,9 @@ const prompt = inquirer.createPromptModule();
 prompt([
   { name: "title", message: "Docs title?", default: "Example Title" },
   { name: "author", message: "Author?", default: "John Doe" },
+  { name: "icon", message: "Icon for web page?", default: "default.png" },
+  { name: "logo", message: "Logo for web page?", default: "default.png" },
+  
   {
     name: "template",
     message: "Select template?",
