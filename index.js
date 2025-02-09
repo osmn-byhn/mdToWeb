@@ -92,9 +92,19 @@ const prompt = inquirer.createPromptModule();
 prompt([
   { name: "title", message: "Docs title?", default: "Example Title" },
   { name: "author", message: "Author?", default: "John Doe" },
-  { name: "icon", message: "Icon for web page?", default: "default.png" },
-  { name: "logo", message: "Logo for web page?", default: "default.png" },
-  
+  { name: "icon", message: "Icon for web page", default: "default.png" },
+  {
+    name: "useLogo",
+    type: "confirm",
+    message: "Do you want use logo?",
+    default: false,
+  },
+  {
+    name: "logo",
+    message: "Logo for web page",
+    default: "default.png",
+    when: (answers) => answers.useLogo,
+  },
   {
     name: "template",
     message: "Select template?",
