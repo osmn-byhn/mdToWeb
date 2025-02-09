@@ -102,7 +102,6 @@ prompt([
   {
     name: "logo",
     message: "Logo for web page",
-    default: "default.png",
     when: (answers) => answers.useLogo,
   },
   {
@@ -167,6 +166,32 @@ prompt([
 ]).then(async (answers) => {
   let socialLinks = [];
   let sourceLinks = [];
+  let logoLink = "";
+  let iconLink = "";
+  if (answers.useLogo === true && answers.logo?.length > 0) {
+    if (answers.logo.startsWith("http://") || answers.logo.startsWith("https://")) {
+      logoLink = answers.logo;
+    } else {
+      if (fs.existsSync(answers.logo)) {
+        logoLink = answers.logo;
+      } else {
+        console.error("The file path is invalid: ", answers.logo);
+      }
+    }
+  }
+  if (answers.icon?.length > 0) {
+    if (answers.icon === "default.png") {
+      iconLink = "https://i.hizliresim.com/278ij38.png";
+    } else if (answers.icon.startsWith("http://") || answers.icon.startsWith("https://")) {
+      iconLink = answers.icon;
+    } else {
+      if (fs.existsSync(answers.icon)) {
+        iconLink = answers.icon;
+      } else {
+        console.error("The file path is invalid: ", answers.icon);
+      }
+    }
+  }  
   if (answers.links && answers.socialMedia?.length > 0) {
     for (const platformValue of answers.socialMedia) {
       const platform = socialMediaPlatforms.find(
@@ -257,7 +282,9 @@ prompt([
       answers.links,
       answers.socialMediaType,
       sourceLinks,
-      socialLinks
+      socialLinks,
+      logoLink,
+      answers.icon
     );
   });
 });
