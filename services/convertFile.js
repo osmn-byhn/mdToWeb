@@ -21,7 +21,9 @@ export class FileConverter {
     links,
     socialMediaType,
     sourceLinks,
-    socialLinks
+    socialLinks,
+    logoLink,
+    icon
   ) {
     try {
       if (!fs.existsSync(inputFile)) {
@@ -39,6 +41,10 @@ export class FileConverter {
       let socialMediasNavbarHTML = "";
       let sourceLinksHTML = "";
       let headScript = "";
+      let logoHTML = "";
+      if (logoLink.length > 0) {
+        logoHTML = `<img src="${logoLink}" class="h-[4rem] w-auto absolute top-4 left-4 p-2" alt="${title}" />`;
+      }
       if (sourceLinks.length > 0) {
         sourceLinksHTML = `
           <div class="flex gap-2">
@@ -59,7 +65,7 @@ export class FileConverter {
         socialMediasHTML = returnSocialMedia(socialLinks, socialMediaType);
         if (socialMediaType === "Header Static Icon") {
           socialMediasHTML = returnSocialMedia(socialLinks, socialMediaType);
-          socialMediasNavbarHTML = socialMediasHTML
+          socialMediasNavbarHTML = socialMediasHTML;
         }
       } else {
         socialMediasHTML = "";
@@ -124,8 +130,7 @@ export class FileConverter {
           </script>  
         `;
       }
-      console.log("multiLang", multiLang);
-      
+
       if (multiLang === true) {
         let langOptions = languages
           .map(
@@ -171,7 +176,7 @@ export class FileConverter {
           )
           .join("")}`;
       }
-      
+
       if (author !== "") {
         authorHTML = `<p class="text-right text-black dark:text-white">Author: ${author}</p>`;
       }
@@ -200,7 +205,9 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[8vh]">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""} ${sourceLinksHTML} </div>`
+            `<div id="app" class="w-[95%] lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
+              socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
+            } ${sourceLinksHTML} </div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -216,7 +223,9 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[8vh]">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""} ${sourceLinksHTML}</div>`
+            `<div id="app" class="w-[95%] lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
+              socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
+            } ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -235,7 +244,9 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-full lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[8vh]">${htmlContent} ${toggleHTML} ${authorHTML} ${socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""} ${sourceLinksHTML}</div>`
+            `<div id="app" class="w-[95%] lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
+              socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
+            } ${sourceLinksHTML}</div>`
           );
           finalHtml = finalHtml.replace(
             "<title></title>",
@@ -245,6 +256,10 @@ export class FileConverter {
           throw new Error("🙅 Template file not found");
         }
       }
+      finalHtml = finalHtml.replace(
+        `<link rel="shortcut icon" href="" type="image/x-icon">`,
+        `<link rel="shortcut icon" href="${icon}" type="image/x-icon">`
+      )
       const dom = new JSDOM(finalHtml);
       const doc = dom.window.document;
       doc.head.insertAdjacentHTML("beforeend", headScript);
