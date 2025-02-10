@@ -18,7 +18,8 @@ class MDToWeb {
     sourceLinks,
     socialLinks,
     logoLink,
-    icon
+    iconLink,
+    fontLink
   ) {
     this.converter = new FileConverter();
     converter.convertFile(
@@ -35,7 +36,8 @@ class MDToWeb {
       sourceLinks,
       socialLinks,
       logoLink,
-      icon
+      iconLink,
+      fontLink
     );
   }
 }

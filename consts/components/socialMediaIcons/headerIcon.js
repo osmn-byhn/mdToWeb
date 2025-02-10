@@ -18,7 +18,7 @@ export function returnSocialMediaHeaderIcon(socialLinks) {
         <i class="bi bi-three-dots text-black dark:text-white text-xl"></i>
       </button>
       
-      <div class="hidden md:hidden absolute h-[50vh] overflow-y-auto right-0 top-10 bg-white dark:bg-black p-2 rounded-md shadow-md flex flex-col gap-2">
+      <div class="hidden md:hidden absolute max-h-[50vh] overflow-y-auto right-0 top-10 bg-white dark:bg-black p-2 rounded-md shadow-md flex flex-col gap-2">
         ${socialLinks
           .map((social) => {
             const textColor = ["GitHub", "Twitter", "Web", "Other"].includes(social.name)
