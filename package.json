@@ -11,7 +11,7 @@
     "url": "git+https://github.com/osmn-byhn/mdToWeb.git"
   },
   "bin": {
-    "mtdocs": "./bin/cli.js"
+    "mdtoweb": "./bin/cli.js"
   },
   "keywords": [
     "md",

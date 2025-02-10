@@ -92,7 +92,7 @@ const prompt = inquirer.createPromptModule();
 prompt([
   { name: "title", message: "Docs title?", default: "Example Title" },
   { name: "author", message: "Author?", default: "John Doe" },
-  { name: "icon", message: "Icon for web page", default: "default.png" },
+  { name: "icon", message: "Icon for web page", default: "default" },
   {
     name: "useLogo",
     type: "confirm",
@@ -117,6 +117,18 @@ prompt([
     type: "list",
     choices: ["Light", "Dark", "Light and Dark", "Auto Theme"],
     default: "Light",
+  },
+  {
+    name: "useFont",
+    type: "confirm",
+    message: "Do you want use font?",
+    default: false,
+  },
+  {
+    name: "font",
+    message: "Font for web page",
+    when: (answers) => answers.useFont,
+    default: "default"
   },
   {
     name: "multiLang",
@@ -168,6 +180,7 @@ prompt([
   let sourceLinks = [];
   let logoLink = "";
   let iconLink = "";
+  let fontLink = "";
   if (answers.useLogo === true && answers.logo?.length > 0) {
     if (answers.logo.startsWith("http://") || answers.logo.startsWith("https://")) {
       logoLink = answers.logo;
@@ -180,7 +193,7 @@ prompt([
     }
   }
   if (answers.icon?.length > 0) {
-    if (answers.icon === "default.png") {
+    if (answers.icon === "default") {
       iconLink = "https://i.hizliresim.com/278ij38.png";
     } else if (answers.icon.startsWith("http://") || answers.icon.startsWith("https://")) {
       iconLink = answers.icon;
@@ -191,7 +204,17 @@ prompt([
         console.error("The file path is invalid: ", answers.icon);
       }
     }
-  }  
+  }
+  console.log(iconLink);
+  
+  if (answers.useFont === true && answers.font?.length > 0) {
+    if (answers.font === "default") {
+      fontLink = `<link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">`;
+    }
+    else {
+      fontLink = answers.font;
+    }
+  }
   if (answers.links && answers.socialMedia?.length > 0) {
     for (const platformValue of answers.socialMedia) {
       const platform = socialMediaPlatforms.find(
@@ -284,7 +307,8 @@ prompt([
       sourceLinks,
       socialLinks,
       logoLink,
-      answers.icon
+      iconLink,
+      fontLink
     );
   });
 });

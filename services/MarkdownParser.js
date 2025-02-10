@@ -125,7 +125,7 @@ export class MarkdownParser {
                 .filter((cell) => cell);
               if (!cells.length) return "";
               return `<tr class='${
-                index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
+                index % 2 === 0 ? "bg-gray-100 bg-gray-100 dark:bg-gray-900" : "bg-gray-200 dark:bg-gray-800"
               }'>
             ${cells
               .map(

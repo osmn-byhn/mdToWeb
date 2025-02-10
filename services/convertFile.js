@@ -9,6 +9,18 @@ export class FileConverter {
   constructor() {
     this.parser = new MarkdownParser();
   }
+  extractHref(linkTag) {
+    const match = linkTag.match(/href="([^"]+)"/);
+    return match ? match[1] : null;
+  }
+  getFontFamilyFromLink(fontLink) {
+    const hrefUrl = this.extractHref(fontLink)
+    const urlParams = new URL(hrefUrl).searchParams;
+    const fontFamily = urlParams.get("family");
+    console.log(fontFamily);
+    
+    return fontFamily ? fontFamily.split(":")[0].replace(/\+/g, " ") : null;
+  }
   convertFile(
     inputFile,
     outputFile,
@@ -23,7 +35,8 @@ export class FileConverter {
     sourceLinks,
     socialLinks,
     logoLink,
-    icon
+    iconLink,
+    fontLink
   ) {
     try {
       if (!fs.existsSync(inputFile)) {
@@ -42,6 +55,8 @@ export class FileConverter {
       let sourceLinksHTML = "";
       let headScript = "";
       let logoHTML = "";
+      console.log("fontLink: ", fontLink);
+      
       if (logoLink.length > 0) {
         logoHTML = `<img src="${logoLink}" class="h-[4rem] w-auto absolute top-4 left-4 p-2" alt="${title}" />`;
       }
@@ -258,8 +273,19 @@ export class FileConverter {
       }
       finalHtml = finalHtml.replace(
         `<link rel="shortcut icon" href="" type="image/x-icon">`,
-        `<link rel="shortcut icon" href="${icon}" type="image/x-icon">`
+        `<link rel="shortcut icon" href="${iconLink}" type="image/x-icon">`
+      );
+      
+      finalHtml = finalHtml.replace(
+        `<link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">`,
+        fontLink
+      );
+      finalHtml = finalHtml.replace(
+        `font-family: "Afacad", serif;`,
+        `font-family: "${this.getFontFamilyFromLink(fontLink)}", serif;`
       )
+      
+      
       const dom = new JSDOM(finalHtml);
       const doc = dom.window.document;
       doc.head.insertAdjacentHTML("beforeend", headScript);
