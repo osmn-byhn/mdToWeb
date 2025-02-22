@@ -14,13 +14,13 @@
     "mdtoweb": "./bin/cli.js"
   },
   "files": [
-    "bin",
+    "bin/",
     "index.js",
-    "consts/templates",
-    "consts/components",
-    "consts",
-    "assets",
-    "services"
+    "consts/templates/",
+    "consts/components/",
+    "consts/",
+    "assets/",
+    "services/"
   ],
   "keywords": [
     "md",

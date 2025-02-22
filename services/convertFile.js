@@ -6,6 +6,10 @@ import { JSDOM } from "jsdom";
 const { html: beautifyHtml } = pkg;
 import { returnSocialMedia } from "../consts/components/socialMediaIcons/index.js";
 import { returnSidebar } from "../consts/components/sidebars/index.js";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 export class FileConverter {
   constructor() {
     this.parser = new MarkdownParser();
@@ -222,7 +226,9 @@ export class FileConverter {
       
     }
       if (template === "Basic") {
-        const templatePath = path.join("consts/templates/basic.html");
+        const templatePath = path.join(__dirname, "consts", "templates", "basic.html");
+        console.log(templatePath);
+        
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
@@ -242,7 +248,7 @@ export class FileConverter {
       if (template === "Navigation link") {
         console.log(template);
     
-        const templatePath = path.join("consts/templates/navigation_link.html");
+        const templatePath = path.join(__dirname, "consts", "templates", "navigation_link.html");
         if (fs.existsSync(templatePath)) {
             let templateContent = fs.readFileSync(templatePath, "utf-8");
     
@@ -276,9 +282,7 @@ export class FileConverter {
     
       finalHtml = finalHtml.replace("<body>", `<body class="${bodyClasses}">`);
       if (template === "Navigation, Navbar and Footer") {
-        const templatePath = path.join(
-          "consts/templates/navbar_and_footer.html"
-        );
+        const templatePath =  path.join(__dirname, "consts", "templates", "navbar_and_footer.html");
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
