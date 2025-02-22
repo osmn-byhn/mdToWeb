@@ -215,6 +215,9 @@ prompt([
       fontLink = answers.font;
     }
   }
+  else {
+    fontLink = `<link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">`;
+  }
   if (answers.links && answers.socialMedia?.length > 0) {
     for (const platformValue of answers.socialMedia) {
       const platform = socialMediaPlatforms.find(

@@ -5,6 +5,7 @@ import pkg from "js-beautify";
 import { JSDOM } from "jsdom";
 const { html: beautifyHtml } = pkg;
 import { returnSocialMedia } from "../consts/components/socialMediaIcons/index.js";
+import { returnSidebar } from "../consts/components/sidebars/index.js";
 export class FileConverter {
   constructor() {
     this.parser = new MarkdownParser();
@@ -55,6 +56,7 @@ export class FileConverter {
       let sourceLinksHTML = "";
       let headScript = "";
       let logoHTML = "";
+      let sideBarHTML = "";
       console.log("fontLink: ", fontLink);
       
       if (logoLink.length > 0) {
@@ -214,6 +216,11 @@ export class FileConverter {
         });
       </script>
     `;
+    if (template  === "Navigation link") {
+      sideBarHTML = returnSidebar(finalHtml, "Auto Height Sidebar");
+      console.log(sideBarHTML);
+      
+    }
       if (template === "Basic") {
         const templatePath = path.join("consts/templates/basic.html");
         if (fs.existsSync(templatePath)) {
@@ -233,23 +240,40 @@ export class FileConverter {
         }
       }
       if (template === "Navigation link") {
+        console.log(template);
+    
         const templatePath = path.join("consts/templates/navigation_link.html");
         if (fs.existsSync(templatePath)) {
-          let templateContent = fs.readFileSync(templatePath, "utf-8");
-          finalHtml = templateContent.replace(
-            '<div id="app"></div>',
-            `<div id="app" class="w-[95%] lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
-              socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
-            } ${sourceLinksHTML}</div>`
-          );
-          finalHtml = finalHtml.replace(
-            "<title></title>",
-            `<title>${title}</title>`
-          );
+            let templateContent = fs.readFileSync(templatePath, "utf-8");
+    
+            // İlk replace işlemi
+            finalHtml = templateContent.replace(
+                '<div id="content"></div>',
+                `<div id="content" class="w-[95%] lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
+                    socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
+                } ${sourceLinksHTML}</div>`
+            );
+    
+            // İkinci replace işlemi (finalHtml üzerinden yapılmalı)
+            finalHtml = finalHtml.replace(
+                '<div id="sidebar"></div>',
+                `<div id="sidebar" class="w-[95%] lg:w-2/3 mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh] lg:ml-12 lg:mr-12">${logoHTML} ${sideBarHTML} ${authorHTML} ${
+                    socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
+                } ${sourceLinksHTML}</div>`
+            );
+    
+            // Title değiştirme işlemi
+            finalHtml = finalHtml.replace(
+                "<title></title>",
+                `<title>${title}</title>`
+            );
+    
+            console.log(finalHtml);
         } else {
-          throw new Error("🙅 Template file not found");
+            throw new Error("🙅 Template file not found");
         }
-      }
+    }
+    
       finalHtml = finalHtml.replace("<body>", `<body class="${bodyClasses}">`);
       if (template === "Navigation, Navbar and Footer") {
         const templatePath = path.join(
