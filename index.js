@@ -6,7 +6,7 @@ import MDToWeb from "./services/index.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const currentDir = process.cwd();
-const languagesFile = path.join(currentDir, "consts", "languages.json");
+const languagesFile = path.join(__dirname, "consts", "languages.json");
 const languages = JSON.parse(fs.readFileSync(languagesFile, "utf-8"));
 import socialMediaPlatforms from "./consts/socialMedia.js";
 const languageChoices = languages.map((lang) => ({
