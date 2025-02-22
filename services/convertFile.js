@@ -226,7 +226,7 @@ export class FileConverter {
       
     }
       if (template === "Basic") {
-        const templatePath = path.join(__dirname, "consts", "templates", "basic.html");
+        const templatePath = path.join(__dirname, "..","consts", "templates", "basic.html");
         console.log(templatePath);
         
         if (fs.existsSync(templatePath)) {
@@ -248,7 +248,7 @@ export class FileConverter {
       if (template === "Navigation link") {
         console.log(template);
     
-        const templatePath = path.join(__dirname, "consts", "templates", "navigation_link.html");
+        const templatePath = path.join(__dirname, "..","consts", "templates", "navigation_link.html");
         if (fs.existsSync(templatePath)) {
             let templateContent = fs.readFileSync(templatePath, "utf-8");
     
@@ -282,7 +282,7 @@ export class FileConverter {
     
       finalHtml = finalHtml.replace("<body>", `<body class="${bodyClasses}">`);
       if (template === "Navigation, Navbar and Footer") {
-        const templatePath =  path.join(__dirname, "consts", "templates", "navbar_and_footer.html");
+        const templatePath =  path.join(__dirname, "..","consts", "templates", "navbar_and_footer.html");
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
