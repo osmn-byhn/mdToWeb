@@ -129,9 +129,7 @@ prompt([
         console.error("The file path is invalid: ", answers.icon);
       }
     }
-  }
-  console.log(iconLink);
-  
+  }  
   if (answers.useFont === true && answers.font?.length > 0) {
     if (answers.font === "default") {
       fontLink = `<link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">`;

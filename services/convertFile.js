@@ -21,9 +21,7 @@ export class FileConverter {
   getFontFamilyFromLink(fontLink) {
     const hrefUrl = this.extractHref(fontLink)
     const urlParams = new URL(hrefUrl).searchParams;
-    const fontFamily = urlParams.get("family");
-    console.log(fontFamily);
-    
+    const fontFamily = urlParams.get("family");    
     return fontFamily ? fontFamily.split(":")[0].replace(/\+/g, " ") : null;
   }
   convertFile(
@@ -61,7 +59,6 @@ export class FileConverter {
       let headScript = "";
       let logoHTML = "";
       let sideBarHTML = "";
-      console.log("fontLink: ", fontLink);
       
       if (logoLink.length > 0) {
         logoHTML = `<img src="${logoLink}" class="h-[4rem] w-auto absolute top-4 left-4 p-2" alt="${title}" />`;
@@ -221,14 +218,10 @@ export class FileConverter {
       </script>
     `;
     if (template  === "Navigation link") {
-      sideBarHTML = returnSidebar(finalHtml, "Auto Height Sidebar");
-      console.log(sideBarHTML);
-      
+      sideBarHTML = returnSidebar(finalHtml, "Auto Height Sidebar");      
     }
       if (template === "Basic") {
-        const templatePath = path.join(__dirname, "..","consts", "templates", "basic.html");
-        console.log(templatePath);
-        
+        const templatePath = path.join(__dirname, "..","consts", "templates", "basic.html");        
         if (fs.existsSync(templatePath)) {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
@@ -245,36 +238,26 @@ export class FileConverter {
           throw new Error("🙅 Template file not found");
         }
       }
-      if (template === "Navigation link") {
-        console.log(template);
-    
+      if (template === "Navigation link") {    
         const templatePath = path.join(__dirname, "..","consts", "templates", "navigation_link.html");
         if (fs.existsSync(templatePath)) {
             let templateContent = fs.readFileSync(templatePath, "utf-8");
-    
-            // İlk replace işlemi
             finalHtml = templateContent.replace(
                 '<div id="content"></div>',
                 `<div id="content" class="w-[95%] lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
                     socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
                 } ${sourceLinksHTML}</div>`
             );
-    
-            // İkinci replace işlemi (finalHtml üzerinden yapılmalı)
             finalHtml = finalHtml.replace(
                 '<div id="sidebar"></div>',
                 `<div id="sidebar" class="w-[95%] lg:w-2/3 mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh] lg:ml-12 lg:mr-12">${logoHTML} ${sideBarHTML} ${authorHTML} ${
                     socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
                 } ${sourceLinksHTML}</div>`
             );
-    
-            // Title değiştirme işlemi
             finalHtml = finalHtml.replace(
                 "<title></title>",
                 `<title>${title}</title>`
             );
-    
-            console.log(finalHtml);
         } else {
             throw new Error("🙅 Template file not found");
         }
