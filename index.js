@@ -288,14 +288,15 @@ prompt([
       filePath: `${filePath}.md`,
     });
   }
+  const currentDir = process.cwd();
   files.forEach(({ langCode, docName, filePath }) => {
-    const fullFilePath = path.join(__dirname, filePath);
+    const fullFilePath = path.join(currentDir, filePath);
     if (!fs.existsSync(fullFilePath)) {
       console.error(`❌ File not found: ${fullFilePath}`);
       return;
     }
     const parser = new MDToWeb();
-    const outputFile = path.resolve(__dirname, "index.html");
+    const outputFile = path.resolve(currentDir, "index.html");
     parser.convertFile(
       fullFilePath,
       outputFile,
