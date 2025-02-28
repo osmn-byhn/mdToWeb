@@ -59,9 +59,43 @@ export class FileConverter {
       let headScript = "";
       let logoHTML = "";
       let sideBarHTML = "";
+      let hamburgerButton = ``;
+      let hamburgerButtonHTML = ``;
       
       if (logoLink.length > 0) {
         logoHTML = `<img src="${logoLink}" class="h-[4rem] w-auto absolute top-4 left-4 p-2" alt="${title}" />`;
+      }
+      if (template  === "Navigation link") {
+        sideBarHTML = returnSidebar(finalHtml, "Auto Height Sidebar");
+        hamburgerButton = `
+        <button id="openModal" class="block lg:hidden focus:outline-none" type="button">
+          <i class="bi bi-list text-black dark:text-white font-medium text-md text-center"></i>
+        </button>`
+        hamburgerButtonHTML = `
+        <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur hidden">
+            <div class="relative w-[calc(100%-2rem)] h-[calc(100%-2rem)] bg-white rounded-lg shadow-lg p-6">
+                <button id="closeModal" class="absolute top-4 right-4 text-4xl">&times;</button>
+                <h2 class="text-lg font-bold">${title}</h2>
+                ${sideBarHTML}
+            </div>
+        </div>
+        
+        <script>
+            const openModal = document.getElementById("openModal");
+            const closeModal = document.getElementById("closeModal");
+            const modal = document.getElementById("modal");
+            
+            openModal.addEventListener("click", () => {
+                modal.classList.remove("hidden");
+            });
+            
+            closeModal.addEventListener("click", () => {
+                modal.classList.add("hidden");
+            });
+        </script>
+        `;
+        console.log("hamburgerButtonHTML: ", hamburgerButtonHTML);
+        
       }
       if (sourceLinks.length > 0) {
         sourceLinksHTML = `
@@ -116,6 +150,7 @@ export class FileConverter {
         bodyClasses = "bg-white text-black dark:bg-gray-900 dark:text-white";
         themeToggle = `
           <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
+            ${hamburgerButton}
             ${socialMediasNavbarHTML}
             <i id="theme-toggle" class="bi bi-sun text-xl"></i>
           </div>`;
@@ -160,6 +195,7 @@ export class FileConverter {
           .join("");
         themeToggle = `
           <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[50]">
+            ${hamburgerButton}
             ${socialMediasNavbarHTML}
             ${
               theme === "Light and Dark"
@@ -217,9 +253,7 @@ export class FileConverter {
         });
       </script>
     `;
-    if (template  === "Navigation link") {
-      sideBarHTML = returnSidebar(finalHtml, "Auto Height Sidebar");      
-    }
+    
       if (template === "Basic") {
         const templatePath = path.join(__dirname, "..","consts", "templates", "basic.html");        
         if (fs.existsSync(templatePath)) {
@@ -244,15 +278,14 @@ export class FileConverter {
             let templateContent = fs.readFileSync(templatePath, "utf-8");
             finalHtml = templateContent.replace(
                 '<div id="content"></div>',
-                `<div id="content" class="w-[95%] lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
+                `<div id="content" class="w-[95%] lg:w-4/5 mx-auto bg-white dark:bg-black rounded-md shadow-xl mr-8 p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
                     socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
-                } ${sourceLinksHTML}</div>`
+                } ${sourceLinksHTML} ${hamburgerButtonHTML}</div>`
             );
             finalHtml = finalHtml.replace(
                 '<div id="sidebar"></div>',
-                `<div id="sidebar" class="w-[95%] lg:w-2/3 mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh] lg:ml-12 lg:mr-12">${logoHTML} ${sideBarHTML} ${authorHTML} ${
-                    socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
-                } ${sourceLinksHTML}</div>`
+                `<div id="sidebar" class="hidden lg:block w-[95%] lg:w-1/5 mx-auto lg:ml-12 lg:mr-12 bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh] max-h-[80vh] 
+      lg:sticky top-0 overflow-y-auto">${sideBarHTML}</div>`
             );
             finalHtml = finalHtml.replace(
                 "<title></title>",

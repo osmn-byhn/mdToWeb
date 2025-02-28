@@ -38,11 +38,6 @@ export function returnSocialMediaHeaderIcon(socialLinks) {
         const menu = event.currentTarget.nextElementSibling;
         menu.classList.toggle('hidden');
       }
-      document.addEventListener('click', function (event) {
-        document.querySelectorAll('.relative > div').forEach(menu => {
-          if (!menu.classList.contains('hidden')) menu.classList.add('hidden');
-        });
-      });
     </script>
   `;
 }
