@@ -72,10 +72,12 @@ export class FileConverter {
           <i class="bi bi-list text-black dark:text-white font-medium text-md text-center"></i>
         </button>`
         hamburgerButtonHTML = `
-        <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur hidden">
-            <div class="relative w-[calc(100%-2rem)] h-[calc(100%-2rem)] bg-white rounded-lg shadow-lg p-6">
-                <button id="closeModal" class="absolute top-4 right-4 text-4xl">&times;</button>
-                <h2 class="text-lg font-bold">${title}</h2>
+        <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur hidden z-[999]">
+            <div class="relative w-[calc(100%-2rem)] h-[calc(100%-2rem)] bg-white dark:bg-black rounded-lg shadow-lg p-6 overflow-scroll">
+                <div class="sticky bg-white dark:bg-black  w-full">
+                  <button id="closeModal" class="absolute top-0 right-4 text-4xl">&times;</button>
+                  <h2 class="text-xl font-bold">${title}</h2>
+                </div>
                 ${sideBarHTML}
             </div>
         </div>
@@ -278,7 +280,7 @@ export class FileConverter {
             let templateContent = fs.readFileSync(templatePath, "utf-8");
             finalHtml = templateContent.replace(
                 '<div id="content"></div>',
-                `<div id="content" class="w-[95%] lg:w-4/5 mx-auto bg-white dark:bg-black rounded-md shadow-xl mr-8 p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
+                `<div id="content" class="w-[95%] lg:w-4/5 mx-auto bg-white dark:bg-black rounded-md shadow-xl lg:mr-8 p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
                     socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
                 } ${sourceLinksHTML} ${hamburgerButtonHTML}</div>`
             );
