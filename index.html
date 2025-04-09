@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+    integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <title>mdToWeb</title>
+  <link rel="shortcut icon" href="https://i.hizliresim.com/278ij38.png"
+    type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&amp;display=swap"
+    rel="stylesheet">
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css"
+    rel="stylesheet">
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <style>
+    body {
+      font-family: "Afacad", serif;
+    }
+  </style>
+
+  <script>
+    if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in
+          localStorage) && window.matchMedia("(prefers-color-scheme: dark)")
+        .matches)) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  </script>
+</head>
+
+<body class="bg-white text-black dark:bg-gray-900 dark:text-white">
+  <div id="app" class="lg:flex lg:gap-4">
+    <div id="sidebar" class="hidden lg:block w-[95%] lg:w-1/5 mx-auto lg:ml-12 lg:mr-12 bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh] max-h-[80vh] 
+      lg:sticky top-0 overflow-y-auto">
+      <div class="flex flex-wrap gap-3 mt-12">
+        <div class="relative">
+          <div class="absolute mt-1 rounded-md w-48">
+            <a id="-mdtoweb-" href="#-mdtoweb-" class="block p-2 font-bold">
+              MDtoWeb
+            </a><a id="-overview-" href="#-overview-"
+              class="block p-2 font-bold">
+              📚 Overview
+            </a><a id="-features-" href="#-features-"
+              class="block p-2 font-bold">
+              ✨ Features
+            </a><a id="-installation-" href="#-installation-"
+              class="block p-2 font-bold">
+              🚀 Installation
+            </a><a id="-usage-" href="#-usage-" class="block p-2 font-bold">
+              🔧 Usage
+            </a><a id="-templates-" href="#-templates-"
+              class="block p-2 font-bold">
+              🖼️ Templates
+            </a><a id="-basic-template-" href="#-basic-template-"
+              class="block p-2 font-bold">
+              Basic Template
+            </a><a id="-navigation-link-template-"
+              href="#-navigation-link-template-" class="block p-2 font-bold">
+              Navigation Link Template
+            </a><a id="-themes-" href="#-themes-" class="block p-2 font-bold">
+              🎨 Themes
+            </a><a id="-multilanguage-support-" href="#-multilanguage-support-"
+              class="block p-2 font-bold">
+              🌐 Multi-Language Support
+            </a><a id="-social-media-integration-"
+              href="#-social-media-integration-" class="block p-2 font-bold">
+              🔗 Social Media Integration
+            </a><a id="-markdown-features-support-"
+              href="#-markdown-features-support-" class="block p-2 font-bold">
+              📝 Markdown Features Support
+            </a><a id="-example-" href="#-example-" class="block p-2 font-bold">
+              📋 Example
+            </a><a id="-project-structure-" href="#-project-structure-"
+              class="block p-2 font-bold">
+              📦 Project Structure
+            </a><a id="-requirements-" href="#-requirements-"
+              class="block p-2 font-bold">
+              📋 Requirements
+            </a><a id="-contributing-" href="#-contributing-"
+              class="block p-2 font-bold">
+              🤝 Contributing
+            </a><a id="-license-" href="#-license-" class="block p-2 font-bold">
+              📄 License
+            </a><a id="-author-" href="#-author-" class="block p-2 font-bold">
+              👨‍💻 Author
+            </a><a id="-acknowledgements-" href="#-acknowledgements-"
+              class="block p-2 font-bold">
+              🙏 Acknowledgements
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="content"
+      class="w-[95%] lg:w-4/5 mx-auto bg-white dark:bg-black rounded-md shadow-xl lg:mr-8 p-5 mt-[12vh]">
+      <h1 id="mdtoweb"
+        class="text-3xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#mdtoweb">MDtoWeb</a>
+      </h1>
+
+      <a class="text-blue-500 hover:underline"
+        href="https://www.npmjs.com/package/mdtoweb-cli"><img
+          class="rounded-md my-2"
+          src="https://img.shields.io/npm/v/mdtoweb-cli.svg"
+          alt="NPM Version"></a>
+      <a class="text-blue-500 hover:underline"
+        href="https://opensource.org/licenses/ISC"><img class="rounded-md my-2"
+          src="https://img.shields.io/badge/License-ISC-blue.svg"
+          alt="License: ISC"></a>
+
+      A powerful command-line tool to convert Markdown files into beautiful,
+      customizable HTML web pages with multiple themes, templates, and features.
+
+      <h2 id="-overview"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-overview">📚 Overview</a>
+      </h2>
+
+      MDtoWeb is a versatile markdown-to-HTML converter that transforms your
+      documentation, notes, or any markdown content into professional web pages
+      with minimal effort. Choose from different templates, customize themes,
+      add social media links, and create multi-language documentation with a
+      simple CLI interface.
+
+      <h2 id="-features"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-features">✨ Features</a>
+      </h2>
+      <ul class="list-disc pl-5">
+        <li>🎨 Multiple templates (Basic, Navigation link)</li>
+        <li>🌓 Theme options (Light, Dark, Light and Dark toggle, Auto Theme)
+        </li>
+        <li>🌐 Multi-language support</li>
+        <li>🔗 Social media integration with various display styles</li>
+        <li>📝 Source reference links</li>
+        <li>🖼️ Custom logo and favicon support</li>
+        <li>🔤 Custom font selection</li>
+        <li>📱 Responsive design</li>
+        <li>🎯 Auto-generated table of contents with anchor links</li>
+        <li>💅 Syntax highlighting for code blocks</li>
+        <li>📋 Code block copy button</li>
+      </ul>
+
+      <h2 id="-installation"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-installation">🚀 Installation</a>
+      </h2>
+
+      <div class="code-container relative rounded-lg p-4 overflow-auto mt-2">
+        <button
+          class="copy-btn absolute top-3 right-3 bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-3 py-1 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition m-[25px] z-[10]"><i
+            id="copyBtn" class="bi bi-clipboard"></i></button>
+        <pre class="line-numbers"><code class="language-bash">npm install -g mdtoweb-cli
+</code></pre>
+      </div>
+
+      <h2 id="-usage"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-usage">🔧 Usage</a>
+      </h2>
+
+      Simply run the CLI command in your terminal:
+
+      <div class="code-container relative rounded-lg p-4 overflow-auto mt-2">
+        <button
+          class="copy-btn absolute top-3 right-3 bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-3 py-1 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition m-[25px] z-[10]"><i
+            id="copyBtn" class="bi bi-clipboard"></i></button>
+        <pre class="line-numbers"><code class="language-bash">mdtoweb
+</code></pre>
+      </div>
+
+      Follow the interactive prompts to configure your web page:
+
+      <ul class="list-disc pl-5">
+        <li class="ml-0">Enter document title</li>
+        <li class="ml-0">Specify author name</li>
+        <li class="ml-0">Choose an icon/favicon</li>
+        <li class="ml-0">Add a logo (optional)</li>
+        <li class="ml-0">Select a template (Basic or Navigation link)</li>
+        <li class="ml-0">Choose a theme (Light, Dark, Light and Dark, Auto
+          Theme)</li>
+        <li class="ml-0">Select a custom font (optional)</li>
+        <li class="ml-0">Enable multi-language support (optional)</li>
+        <li class="ml-0">Add social media links (optional)</li>
+        <li class="ml-0">Add reference sources (optional)</li>
+      </ul>
+
+      <h2 id="-templates"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-templates">🖼️ Templates</a>
+      </h2>
+
+      <h3 id="basic-template"
+        class="text-xl font-semibold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#basic-template">Basic Template</a>
+      </h3>
+      A clean, simple layout that focuses on content. Perfect for documentation,
+      articles, or simple pages.
+
+      <h3 id="navigation-link-template"
+        class="text-xl font-semibold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#navigation-link-template">Navigation Link Template</a>
+      </h3>
+      Includes a sidebar navigation that automatically generates links from your
+      markdown headings. Ideal for documentation with multiple sections.
+
+      <h2 id="-themes"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-themes">🎨 Themes</a>
+      </h2>
+      <ul class="list-disc pl-5">
+        <li><b class="font-bold">Light</b>: Clean white background with dark
+          text</li>
+        <li><b class="font-bold">Dark</b>: Dark background with light text</li>
+        <li><b class="font-bold">Light and Dark</b>: Includes a theme toggle
+          button for user preference</li>
+        <li><b class="font-bold">Auto Theme</b>: Adapts to user's system
+          preferences</li>
+      </ul>
+
+      <h2 id="-multi-language-support"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-multi-language-support">🌐 Multi-Language Support</a>
+      </h2>
+
+      Create documentation in multiple languages and allow users to switch
+      between them with a simple dropdown selector. The tool will guide you
+      through setting up different markdown files for each language.
+
+      <h2 id="-social-media-integration"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-social-media-integration">🔗 Social Media Integration</a>
+      </h2>
+
+      Add links to your social media profiles with several display options:
+      <ul class="list-disc pl-5">
+        <li>Only Icon</li>
+        <li>Badge</li>
+        <li>Badge and Username</li>
+        <li>Vertical Icon</li>
+        <li>Header Static Icon</li>
+      </ul>
+
+      <h2 id="-markdown-features-support"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-markdown-features-support">📝 Markdown Features Support</a>
+      </h2>
+
+      MDtoWeb supports most common markdown features:
+      <ul class="list-disc pl-5">
+        <li>Headings (H1-H6)</li>
+        <li><b class="font-bold">Bold</b> and <i class="italic">Italic</i> text
+        </li>
+        <li><del class="line-through">Strikethrough</del></li>
+        <li><code class="bg-gray-200 px-1 rounded">Code</code> and <code
+            class="bg-gray-200 px-1 rounded"></code><code
+            class="bg-gray-200 px-1 rounded">Code blocks</code><code
+            class="bg-gray-200 px-1 rounded"></code> with syntax highlighting
+        </li>
+        <li>&gt; Blockquotes</li>
+        <li>Ordered and unordered lists</li>
+        <li>Nested lists</li>
+        <li>Task lists</li>
+        <li>Tables</li>
+        <li>Images with optional sizing</li>
+        <li>Horizontal rules</li>
+        <li>Links</li>
+      </ul>
+
+      <h2 id="-example"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-example">📋 Example</a>
+      </h2>
+
+      Here's an example of how to use MDtoWeb:
+
+      <ul class="list-disc pl-5">
+        <li class="ml-0">Create your markdown file (e.g., <code
+            class="bg-gray-200 px-1 rounded">documentation.md</code>)</li>
+        <li class="ml-0">Run <code
+            class="bg-gray-200 px-1 rounded">mdtoweb</code> in your terminal
+        </li>
+        <li class="ml-0">Follow the prompts to configure your web page</li>
+        <li class="ml-0">The tool will generate an <code
+            class="bg-gray-200 px-1 rounded">index.html</code> file in your
+          current directory</li>
+      </ul>
+
+      <h2 id="-project-structure"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-project-structure">📦 Project Structure</a>
+      </h2>
+
+      <code class="bg-gray-200 px-1 rounded"></code>`
+      mdtoweb-cli/
+      ├── bin/
+      │ └── cli.js # CLI entry point
+      ├── consts/
+      │ ├── components/ # UI components
+      │ ├── templates/ # HTML templates
+      │ ├── languages.json # Supported languages
+      │ └── socialMedia.js # Social media platforms
+      ├── services/
+      │ ├── convertFile.js # File conversion logic
+      │ ├── MarkdownParser.js # Markdown parsing
+      │ └── index.js # Service exports
+      ├── index.js # Main application logic
+      └── package.json # Project configuration
+      <code class="bg-gray-200 px-1 rounded"></code>`
+
+      <h2 id="-requirements"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-requirements">📋 Requirements</a>
+      </h2>
+      <ul class="list-disc pl-5">
+        <li>Node.js 14.x or higher</li>
+        <li>npm 6.x or higher</li>
+      </ul>
+
+      <h2 id="-contributing"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-contributing">🤝 Contributing</a>
+      </h2>
+
+      Contributions, issues, and feature requests are welcome! Feel free to
+      check <a class="text-blue-500 hover:underline"
+        href="https://github.com/osmn-byhn/mdToWeb/issues">issues page</a>.
+
+      <h2 id="-license"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-license">📄 License</a>
+      </h2>
+
+      This project is <a class="text-blue-500 hover:underline"
+        href="https://opensource.org/licenses/ISC">ISC</a> licensed.
+
+      <h2 id="-author"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-author">👨‍💻 Author</a>
+      </h2>
+      <ul class="list-disc pl-5">
+        <li><b class="font-bold">Osman Beyhan</b> - <a
+            class="text-blue-500 hover:underline"
+            href="https://github.com/osmn-byhn">GitHub</a></li>
+        <li>Website: <a class="text-blue-500 hover:underline"
+            href="https://www.mdtoweb.osmanbeyhan.com/">mdtoweb.osmanbeyhan.com</a>
+        </li>
+      </ul>
+
+      <h2 id="-acknowledgements"
+        class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
+        <a href="#-acknowledgements">🙏 Acknowledgements</a>
+      </h2>
+      <ul class="list-disc pl-5">
+        <li>Markdown parsing and HTML generation</li>
+        <li>Interactive CLI with Inquirer.js</li>
+        <li>HTML beautification with js-beautify</li>
+        <li>DOM manipulation with jsdom </li>
+      </ul>
+
+      <div
+        class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[40]">
+
+        <button id="openModal" class="block lg:hidden focus:outline-none"
+          type="button">
+          <i
+            class="bi bi-list text-black dark:text-white font-medium text-md text-center"></i>
+        </button>
+
+        <i id="theme-toggle" class="bi bi-sun text-xl"></i>
+      </div>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+          const toggleButton = document.getElementById("theme-toggle");
+
+          function updateIcon() {
+            if (document.documentElement.classList.contains("dark")) {
+              toggleButton.classList.remove("bi-moon");
+              toggleButton.classList.add("bi-sun");
+            } else {
+              toggleButton.classList.remove("bi-sun");
+              toggleButton.classList.add("bi-moon");
+            }
+          }
+          updateIcon();
+          toggleButton?.addEventListener("click", () => {
+            document.documentElement.classList.toggle("dark");
+            const isDarkMode = document.documentElement.classList
+              .contains("dark");
+            localStorage.setItem("color-theme", isDarkMode ? "dark" :
+              "light");
+            updateIcon();
+          });
+
+
+          document.querySelector(".copy-btn")?.addEventListener("click",
+            function() {
+              const code = document.querySelector("pre code").innerText;
+              navigator.clipboard.writeText(code);
+              const copyBtn = document.getElementById("copyBtn");
+              copyBtn.classList.remove("bi-clipboard");
+              copyBtn.classList.add("bi-clipboard-check");
+            });
+        });
+      </script>
+      <p class="text-right text-black dark:text-white">Author: Osman Beyhan</p>
+      <div class="flex flex-wrap gap-3 mt-12">
+        <a href="https://github.com/osmn-byhn/mdToWeb" target="_blank"
+          class="flex gap-2 px-3 py-2 rounded-md bg-[#080808] text-white items-center justify-center whitespace-nowrap">
+          <i class="bi bi-github text-xl "></i>
+          <span class="text-xl">GitHub</span>
+        </a><a href="https://www.npmjs.com/package/mdtoweb-cli" target="_blank"
+          class="flex gap-2 px-3 py-2 rounded-md bg-[#cd3e3d] text-white items-center justify-center whitespace-nowrap">
+          <i class="fa-brands fa-npm text-xl "></i>
+          <span class="text-xl">NPM</span>
+        </a><a href="https://yarnpkg.com/package?name=mdtoweb-cli"
+          target="_blank"
+          class="flex gap-2 px-3 py-2 rounded-md bg-[#3c93bb] text-white items-center justify-center whitespace-nowrap">
+          <i class="fa-brands fa-yarn text-xl "></i>
+          <span class="text-xl">Yarn</span>
+        </a><a href="https://www.mdtoweb.osmanbeyhan.com/" target="_blank"
+          class="flex gap-2 px-3 py-2 rounded-md bg-[#000] text-white items-center justify-center whitespace-nowrap">
+          <i class="bi bi-globe-americas text-xl "></i>
+          <span class="text-xl">Web</span>
+        </a>
+      </div>
+      <div id="modal"
+        class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur hidden z-[50]">
+        <div
+          class="relative w-[calc(100%-2rem)] h-[calc(100%-2rem)] bg-white dark:bg-black rounded-lg shadow-lg p-6">
+          <button id="closeModal"
+            class="absolute top-4 right-4 text-4xl">×</button>
+          <h2 class="text-lg font-bold">mdToWeb</h2>
+
+          <div class="flex flex-wrap gap-3 mt-12">
+            <div class="relative">
+              <div class="absolute mt-1 rounded-md w-48">
+                <a id="-mdtoweb-" href="#-mdtoweb-" class="block p-2 font-bold">
+                  MDtoWeb
+                </a><a id="-overview-" href="#-overview-"
+                  class="block p-2 font-bold">
+                  📚 Overview
+                </a><a id="-features-" href="#-features-"
+                  class="block p-2 font-bold">
+                  ✨ Features
+                </a><a id="-installation-" href="#-installation-"
+                  class="block p-2 font-bold">
+                  🚀 Installation
+                </a><a id="-usage-" href="#-usage-" class="block p-2 font-bold">
+                  🔧 Usage
+                </a><a id="-templates-" href="#-templates-"
+                  class="block p-2 font-bold">
+                  🖼️ Templates
+                </a><a id="-basic-template-" href="#-basic-template-"
+                  class="block p-2 font-bold">
+                  Basic Template
+                </a><a id="-navigation-link-template-"
+                  href="#-navigation-link-template-"
+                  class="block p-2 font-bold">
+                  Navigation Link Template
+                </a><a id="-themes-" href="#-themes-"
+                  class="block p-2 font-bold">
+                  🎨 Themes
+                </a><a id="-multilanguage-support-"
+                  href="#-multilanguage-support-" class="block p-2 font-bold">
+                  🌐 Multi-Language Support
+                </a><a id="-social-media-integration-"
+                  href="#-social-media-integration-"
+                  class="block p-2 font-bold">
+                  🔗 Social Media Integration
+                </a><a id="-markdown-features-support-"
+                  href="#-markdown-features-support-"
+                  class="block p-2 font-bold">
+                  📝 Markdown Features Support
+                </a><a id="-example-" href="#-example-"
+                  class="block p-2 font-bold">
+                  📋 Example
+                </a><a id="-project-structure-" href="#-project-structure-"
+                  class="block p-2 font-bold">
+                  📦 Project Structure
+                </a><a id="-requirements-" href="#-requirements-"
+                  class="block p-2 font-bold">
+                  📋 Requirements
+                </a><a id="-contributing-" href="#-contributing-"
+                  class="block p-2 font-bold">
+                  🤝 Contributing
+                </a><a id="-license-" href="#-license-"
+                  class="block p-2 font-bold">
+                  📄 License
+                </a><a id="-author-" href="#-author-"
+                  class="block p-2 font-bold">
+                  👨‍💻 Author
+                </a><a id="-acknowledgements-" href="#-acknowledgements-"
+                  class="block p-2 font-bold">
+                  🙏 Acknowledgements
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <script>
+        const openModal = document.getElementById("openModal");
+        const closeModal = document.getElementById("closeModal");
+        const modal = document.getElementById("modal");
+
+        openModal.addEventListener("click", () => {
+          modal.classList.remove("hidden");
+        });
+
+        closeModal.addEventListener("click", () => {
+          modal.classList.add("hidden");
+        });
+      </script>
+    </div>
+  </div>
+  <hr class="mt-10">
+  <div class="my-5">
+    <p class="text-center">
+      <span class="">❤️ Make via</span>
+      <a href="https://www.mdtoweb.osmanbeyhan.com/"
+        class="text-blue-600">MDtoWeb</a>
+    </p>
+  </div>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js">
+  </script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js">
+  </script>
+
+
+
+</body>
+
+</html>

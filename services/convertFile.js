@@ -94,7 +94,6 @@ export class FileConverter {
             });
         </script>
         `;
-        console.log("hamburgerButtonHTML: ", hamburgerButtonHTML);
         
       }
       if (sourceLinks.length > 0) {
