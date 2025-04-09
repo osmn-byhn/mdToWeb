@@ -33,7 +33,7 @@ prompt([
     name: "template",
     message: "Select template?",
     type: "list",
-    choices: ["Basic", "Navigation link", "Navigation, Navbar and Footer"],
+    choices: ["Basic", "Navigation link"],
     default: "Basic",
   },
   {
