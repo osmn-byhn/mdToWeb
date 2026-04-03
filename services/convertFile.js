@@ -19,10 +19,16 @@ export class FileConverter {
     return match ? match[1] : null;
   }
   getFontFamilyFromLink(fontLink) {
-    const hrefUrl = this.extractHref(fontLink)
-    const urlParams = new URL(hrefUrl).searchParams;
-    const fontFamily = urlParams.get("family");    
-    return fontFamily ? fontFamily.split(":")[0].replace(/\+/g, " ") : null;
+    if (!fontLink) return "Afacad";
+    const hrefUrl = this.extractHref(fontLink);
+    if (!hrefUrl) return "Afacad";
+    try {
+      const urlParams = new URL(hrefUrl).searchParams;
+      const fontFamily = urlParams.get("family");
+      return fontFamily ? fontFamily.split(":")[0].replace(/\+/g, " ") : "Afacad";
+    } catch (e) {
+      return "Afacad";
+    }
   }
   convertFile(
     inputFile,
@@ -63,38 +69,70 @@ export class FileConverter {
       let hamburgerButtonHTML = ``;
       
       if (logoLink.length > 0) {
-        logoHTML = `<img src="${logoLink}" class="h-[4rem] w-auto absolute top-4 left-4 p-2" alt="${title}" />`;
+        logoHTML = `<div class="mb-8 flex justify-center lg:justify-start"><img src="${logoLink}" class="h-12 w-auto grayscale dark:invert opacity-80" alt="${title}" /></div>`;
       }
-      if (template  === "Navigation link") {
+      if (template === "Navigation link") {
         sideBarHTML = returnSidebar(finalHtml, "Auto Height Sidebar");
         hamburgerButton = `
-        <button id="openModal" class="block lg:hidden focus:outline-none" type="button">
-          <i class="bi bi-list text-black dark:text-white font-medium text-md text-center"></i>
-        </button>`
+        <button id="openModal" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-primary transition-all active:scale-90" aria-label="Menu">
+          <i class="bi bi-list text-2xl"></i>
+        </button>`;
         hamburgerButtonHTML = `
-        <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur hidden z-[50]">
-            <div class="relative w-[calc(100%-2rem)] h-[calc(100%-2rem)] bg-white dark:bg-black rounded-lg shadow-lg p-6">
-                <button id="closeModal" class="absolute top-4 right-4 text-4xl">&times;</button>
-                <h2 class="text-lg font-bold">${title}</h2>
-                ${sideBarHTML}
+        <div id="modal" class="fixed inset-0 z-[100] invisible">
+            <div id="modal-backdrop" class="absolute inset-0 bg-black/20 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+            <div id="modal-content" class="relative w-4/5 max-w-xs h-full bg-white dark:bg-slate-900 shadow-2xl p-6 -translate-x-full transition-transform duration-300 ease-out overflow-y-auto">
+                <button id="closeModal" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-2xl transition-colors">&times;</button>
+                <div class="mb-8 pt-4">
+                  <h2 class="text-xl font-bold tracking-tight">${title}</h2>
+                  <p class="text-sm text-secondary pt-1">Documentation</p>
+                </div>
+                <div id="mobile-sidebar">
+                  ${sideBarHTML}
+                </div>
             </div>
         </div>
         
         <script>
+          document.addEventListener("DOMContentLoaded", () => {
             const openModal = document.getElementById("openModal");
             const closeModal = document.getElementById("closeModal");
             const modal = document.getElementById("modal");
+            const backdrop = document.getElementById("modal-backdrop");
+            const content = document.getElementById("modal-content");
             
-            openModal.addEventListener("click", () => {
-                modal.classList.remove("hidden");
-            });
+            function toggleMenu(isOpen) {
+              const icon = openModal.querySelector('i');
+              if (isOpen) {
+                modal.classList.remove("invisible");
+                document.body.style.overflow = 'hidden';
+                if (icon) {
+                  icon.classList.remove("bi-list");
+                  icon.classList.add("bi-x-lg");
+                }
+                setTimeout(() => {
+                  backdrop.classList.add("opacity-100");
+                  content.classList.remove("-translate-x-full");
+                }, 10);
+              } else {
+                backdrop.classList.remove("opacity-100");
+                content.classList.add("-translate-x-full");
+                document.body.style.overflow = '';
+                if (icon) {
+                  icon.classList.remove("bi-x-lg");
+                  icon.classList.add("bi-list");
+                }
+                setTimeout(() => {
+                  modal.classList.add("invisible");
+                }, 300);
+              }
+            }
             
-            closeModal.addEventListener("click", () => {
-                modal.classList.add("hidden");
-            });
+            openModal?.addEventListener("click", () => toggleMenu(true));
+            closeModal?.addEventListener("click", () => toggleMenu(false));
+            backdrop?.addEventListener("click", () => toggleMenu(false));
+          });
         </script>
         `;
-        
       }
       if (sourceLinks.length > 0) {
         sourceLinksHTML = `
@@ -122,46 +160,42 @@ export class FileConverter {
         socialMediasHTML = "";
       }
       if (theme === "Light") {
-        bodyClasses = "bg-gray-100 text-black";
+        bodyClasses = "theme-light";
         headScript = `
           <script>
-            if (localStorage.getItem("color-theme") === "light" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: light)").matches)) {
-              document.documentElement.classList.add("light");
-            } else {
-              document.documentElement.classList.remove("light");
-            }
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("color-theme", "light");
           </script>  
         `;
       }
       if (theme === "Dark") {
-        bodyClasses = "bg-gray-900 text-white";
+        bodyClasses = "dark theme-dark";
         headScript = `
           <script>
-            if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-              document.documentElement.classList.add("dark");
-            } else {
-              document.documentElement.classList.remove("dark");
-            }
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("color-theme", "dark");
           </script>  
         `;
       }
       if (theme === "Light and Dark") {
-        bodyClasses = "bg-white text-black dark:bg-gray-900 dark:text-white";
+        bodyClasses = "";
         themeToggle = `
-          <div class="flex justify-between gap-2 bg-white text-black dark:bg-black dark:text-white rounded-md shadow-md p-3 fixed top-4 right-4 p-2 z-[40]">
-            ${hamburgerButton}
+          <div class="floating-controls">
+            <button id="theme-toggle" class="control-btn hover:scale-110 active:scale-95 transition-all">
+              <i id="theme-toggle-icon" class="bi bi-sun text-2xl"></i>
+            </button>
             ${socialMediasNavbarHTML}
-            <i id="theme-toggle" class="bi bi-sun text-xl"></i>
           </div>`;
         themeScript = `
           const toggleButton = document.getElementById("theme-toggle");
+          const toggleIcon = document.getElementById("theme-toggle-icon");
           function updateIcon() {
             if (document.documentElement.classList.contains("dark")) {
-              toggleButton.classList.remove("bi-moon");
-              toggleButton.classList.add("bi-sun");
+              toggleIcon.classList.remove("bi-sun");
+              toggleIcon.classList.add("bi-moon-stars");
             } else {
-              toggleButton.classList.remove("bi-sun");
-              toggleButton.classList.add("bi-moon");
+              toggleIcon.classList.remove("bi-moon-stars");
+              toggleIcon.classList.add("bi-sun");
             }
           }
           updateIcon();
@@ -259,7 +293,11 @@ export class FileConverter {
           let templateContent = fs.readFileSync(templatePath, "utf-8");
           finalHtml = templateContent.replace(
             '<div id="app"></div>',
-            `<div id="app" class="w-[95%] lg:max-w-[1140px] mx-auto bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
+            `<div id="app" class="w-full mx-auto p-8 lg:p-16 my-12 relative">
+                <div class="prose prose-slate dark:prose-invert max-w-none">
+                  ${htmlContent}
+                </div>
+                ${logoHTML} ${toggleHTML} ${authorHTML} ${
               socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
             } ${sourceLinksHTML} </div>`
           );
@@ -276,15 +314,18 @@ export class FileConverter {
         if (fs.existsSync(templatePath)) {
             let templateContent = fs.readFileSync(templatePath, "utf-8");
             finalHtml = templateContent.replace(
-                '<div id="content"></div>',
-                `<div id="content" class="w-[95%] lg:w-4/5 mx-auto bg-white dark:bg-black rounded-md shadow-xl lg:mr-8 p-5 mt-[12vh]">${htmlContent} ${logoHTML} ${toggleHTML} ${authorHTML} ${
+                '<main id="content" class="mb-12"></main>',
+                `<main id="content" class="mb-12 relative">
+                  <div class="prose prose-slate dark:prose-invert max-w-none">
+                    ${htmlContent}
+                  </div>
+                  ${logoHTML} ${toggleHTML} ${authorHTML} ${
                     socialMediaType !== "Header Static Icon" ? socialMediasHTML : ""
-                } ${sourceLinksHTML} ${hamburgerButtonHTML}</div>`
+                } ${sourceLinksHTML} ${hamburgerButtonHTML}</main>`
             );
             finalHtml = finalHtml.replace(
-                '<div id="sidebar"></div>',
-                `<div id="sidebar" class="hidden lg:block w-[95%] lg:w-1/5 mx-auto lg:ml-12 lg:mr-12 bg-white dark:bg-black rounded-md shadow-xl p-5 mt-[12vh] max-h-[80vh] 
-      lg:sticky top-0 overflow-y-auto">${sideBarHTML}</div>`
+                '<div id="sidebar" class="hidden lg:block glass overflow-y-auto"></div>',
+                `<aside id="sidebar" class="hidden lg:block glass overflow-y-auto px-6 py-8">${sideBarHTML}</aside>`
             );
             finalHtml = finalHtml.replace(
                 "<title></title>",
@@ -332,6 +373,18 @@ export class FileConverter {
       const dom = new JSDOM(finalHtml);
       const doc = dom.window.document;
       doc.head.insertAdjacentHTML("beforeend", headScript);
+
+      // Inject Footer (Hardcoded in logic to prevent easy removal from templates)
+      const footerHTML = `
+        <div class="mt-16 mb-10 py-8 border-t border-gray-100 dark:border-gray-800">
+          <p class="text-center text-sm text-secondary opacity-70">
+            MADE WITH ❤️ BY 
+            <a href="https://www.mdtoweb.osmanbeyhan.com/" class="text-accent hover:underline font-bold tracking-widest uppercase ml-1">MDtoWeb</a>
+          </p>
+        </div>
+      `;
+      doc.body.insertAdjacentHTML("beforeend", footerHTML);
+
       const updatedHtml = dom.serialize();
       const formattedHtml = beautifyHtml(updatedHtml, {
         indent_size: 2,

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+    integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <title>MDtoWeb Final Test</title>
+  <link rel="shortcut icon" href="https://i.hizliresim.com/278ij38.png"
+    type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+  <script>
+    if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in
+          localStorage) && window.matchMedia("(prefers-color-scheme: dark)")
+        .matches)) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  </script>
+</head>
+
+<body class="">https://i.hizliresim.com/5f8p5h5.png
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css"
+    rel="stylesheet">
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+    rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: 'var(--text-primary)',
+            secondary: 'var(--text-secondary)',
+            accent: 'var(--accent-primary)',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root {
+      --bg-main: #fcfcfd;
+      --bg-card: #ffffff;
+      --bg-sidebar: rgba(255, 255, 255, 0.8);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --accent-primary: #3b82f6;
+      --border-primary: #f1f5f9;
+      --shadow-soft: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    }
+
+    .dark {
+      --bg-main: #020617;
+      --bg-card: #0f172a;
+      --bg-sidebar: rgba(15, 23, 42, 0.8);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --accent-primary: #3b82f6;
+      --border-primary: #1e293b;
+      --shadow-soft: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    }
+
+    body {
+      font-family: "Afacad", sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.4s ease;
+    }
+
+    .container-layout {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1024px) {
+      .container-layout {
+        flex-direction: row;
+        padding: 0 2rem;
+      }
+    }
+
+    #sidebar {
+      z-index: 40;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @media (min-width: 1024px) {
+      #sidebar {
+        position: sticky;
+        top: 2rem;
+        height: calc(100vh - 4rem);
+        width: 20rem;
+        flex-shrink: 0;
+        margin-top: 2rem;
+      }
+    }
+
+    #content {
+      flex-grow: 1;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+      #content {
+        padding: 2rem 3rem;
+        margin-top: 2rem;
+      }
+    }
+
+    .glass {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background-color: var(--bg-sidebar);
+      border: 1px solid var(--border-primary);
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* Navigation Links */
+    .nav-link {
+      display: block;
+      padding: 0.625rem 1rem;
+      border-radius: 0.75rem;
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-link:hover {
+      background-color: var(--border-primary);
+      color: var(--text-primary);
+    }
+
+    .nav-link.active {
+      background-color: var(--bg-card);
+      color: var(--accent-primary);
+      border-color: var(--border-primary);
+      font-weight: 600;
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* Hierarchy Indentation */
+    .indent-1 {
+      padding-left: 1rem;
+    }
+
+    .indent-2 {
+      padding-left: 2rem;
+    }
+
+    .indent-3 {
+      padding-left: 3rem;
+    }
+
+    .indent-4 {
+      padding-left: 4rem;
+    }
+
+    .indent-5 {
+      padding-left: 5rem;
+    }
+
+    .indent-6 {
+      padding-left: 6rem;
+    }
+
+    /* Code Blocks */
+    pre {
+      border-radius: 1rem !important;
+      background-color: #0f172a !important;
+      margin: 2rem 0 !important;
+      padding: 1.5rem !important;
+      border: 1px solid var(--border-primary) !important;
+    }
+
+    /* Lists */
+    .tree-list ul {
+      border-left: 1px solid var(--border-primary);
+      margin-left: 0.75rem;
+      padding-left: 1.5rem;
+    }
+
+    /* Theme Toggle & Mobile UI */
+    .floating-controls {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      z-index: 50;
+    }
+
+    .control-btn {
+      width: 3.5rem;
+      height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1.25rem;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      box-shadow: var(--shadow-soft);
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+    }
+
+    .control-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-primary);
+      border-radius: 10px;
+    }
+  </style>
+
+
+  <div class="container-layout pt-20 lg:pt-0">
+    <aside id="sidebar" class="hidden lg:block glass overflow-y-auto px-6 py-8">
+      <div class="space-y-1">
+        <a id="nav-modern-mdtoweb-arayuz-testi"
+          href="#modern-mdtoweb-arayuz-testi"
+          class="nav-link indent-1 font-bold text-gray-900 dark:text-white">Modern
+          MDtoWeb Arayüz Testi</a><a id="nav--yeni-ozellikler"
+          href="#-yeni-ozellikler" class="nav-link indent-2 font-medium">🚀 Yeni
+          Özellikler</a><a id="nav--teknik-bilesenler"
+          href="#-teknik-bilesenler" class="nav-link indent-3 font-medium">🛠️
+          Teknik Bileşenler</a><a id="nav--kod-blogu-testi"
+          href="#-kod-blogu-testi" class="nav-link indent-3 font-medium">💻 Kod
+          Bloğu Testi</a><a id="nav--tablo-sik-path-testi"
+          href="#-tablo-sik-path-testi" class="nav-link indent-3 font-medium">📊
+          Tablo &amp; Şık Path Testi</a><a id="nav--yapilacaklar-listesi"
+          href="#-yapilacaklar-listesi" class="nav-link indent-3 font-medium">✅
+          Yapılacaklar Listesi</a><a id="nav--mermaid-diyagram-testi"
+          href="#-mermaid-diyagram-testi"
+          class="nav-link indent-3 font-medium">📊 Mermaid Diyagram Testi</a>
+      </div>
+    </aside>
+    <main id="content" class="mb-12 relative">
+      <div class="prose prose-slate dark:prose-invert max-w-none">
+        <h1 id="modern-mdtoweb-arayuz-testi"><a
+            href="#modern-mdtoweb-arayuz-testi">Modern MDtoWeb Arayüz Testi</a>
+        </h1>
+
+        Bu doküman, yenilenen <strong>MDtoWeb</strong> arayüzünün tüm
+        özelliklerini test etmek için hazırlanmıştır. Arayüz artık daha mobil
+        uyumlu, minimalist ve ferah.
+
+        <h2 id="-yeni-ozellikler"><a href="#-yeni-ozellikler">🚀 Yeni
+            Özellikler</a></h2>
+        <ul class="tree-list">
+          <li><strong>Gelişmiş Mobil Deneyim</strong>: Kayan yan menü ve akıllı
+            başlık alanı.</li>
+          <li><strong>Kutulardan Arınmış Tasarım</strong>: İçerik artık "box"
+            içine hapsedilmiyor, geniş alanın tadını çıkarıyor.</li>
+          <li><strong>Sabit Kontroller</strong>: Tema değiştirici sağ alt köşede
+            her zaman elinizin altında.</li>
+
+        </ul>
+        <h3 id="-teknik-bilesenler"><a href="#-teknik-bilesenler">🛠️ Teknik
+            Bileşenler</a></h3>
+
+        Aşağıdaki liste, hiyerarşik ağaç yapısını test etmek içindir:
+        <ul class="tree-list">
+          <li><strong>Frontend Teknolojileri</strong></li>
+          <li>HTML5 &amp; Modern CSS (Variables)</li>
+          <li>Tailwind CSS (Typography Plugin)</li>
+          <li>Bootstrap Icons</li>
+          <li><strong>Backend Servisleri</strong></li>
+          <li>Node.js Core</li>
+          <li>JSDOM Integration</li>
+          <li>Prism.js Syntax Highlighting</li>
+
+        </ul>
+        <h3 id="-kod-blogu-testi"><a href="#-kod-blogu-testi">💻 Kod Bloğu
+            Testi</a></h3>
+
+        Kod blokları artık daha temiz bir başlık alanına ve kopyalama butonuna
+        sahip:
+
+        <div
+          class="code-container relative rounded-2xl shadow-sm border border-primary overflow-hidden my-8">
+          <div
+            class="flex items-center justify-between px-6 py-3 bg-gray-50/50 dark:bg-gray-800/30 border-b border-primary">
+            <span
+              class="text-xs font-medium tracking-widest uppercase text-secondary">javascript</span><button
+              class="copy-btn text-secondary hover:text-primary transition-all active:scale-90"><i
+                id="copyBtn" class="bi bi-clipboard text-lg"></i></button></div>
+          <pre class="line-numbers !m-0 !bg-transparent !p-6"><code class="language-javascript">// Tema değiştirme mantığı
+const toggleTheme = () =&gt; {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  console.log('Tema değiştirildi:', isDark ? 'Koyu' : 'Açık');
+};
+</code></pre>
+        </div>
+
+        <h3 id="-tablo-sik-path-testi"><a href="#-tablo-sik-path-testi">📊 Tablo
+            &amp; Şık Path Testi</a></h3>
+
+        Tablolar modernist ve okunaklı, dosya yolları otomatik olarak şık birer
+        etikete (badge) dönüşüyor:
+
+
+        <div class="overflow-x-auto my-8 border-b border-primary/50">
+          <table class="!m-0 w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-primary">
+                <th>Bileşen</th>
+                <th>Dosya Yolu</th>
+                <th>Açıklama</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Core Logic</td>
+                <td><span
+                    class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-accent/5 text-accent font-mono text-[0.85em] border border-accent/10">
+                    <i class="bi bi-folder2-open opacity-70"></i>
+                    src/services/convertFile.js
+                  </span></td>
+                <td>Ana dönüştürme mantığı.</td>
+              </tr>
+              <tr>
+                <td>Template</td>
+                <td><span
+                    class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-accent/5 text-accent font-mono text-[0.85em] border border-accent/10">
+                    <i class="bi bi-folder2-open opacity-70"></i>
+                    consts/templates/navigation_link.html
+                  </span></td>
+                <td>Responsive şablon dosyası.</td>
+              </tr>
+              <tr>
+                <td>Style</td>
+                <td><span
+                    class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-accent/5 text-accent font-mono text-[0.85em] border border-accent/10">
+                    <i class="bi bi-folder2-open opacity-70"></i>
+                    consts/templates/basic.css
+                  </span></td>
+                <td>Genel stil tanımları.</td>
+              </tr>
+              <tr>
+                <td>Parser</td>
+                <td><span
+                    class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-accent/5 text-accent font-mono text-[0.85em] border border-accent/10">
+                    <i class="bi bi-folder2-open opacity-70"></i>
+                    services/MarkdownParser.js
+                  </span></td>
+                <td>Markdown işleme motoru.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="overflow-x-auto my-8 border-b border-primary/50">
+          <table class="!m-0 w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-primary">
+                <th>Özellik</th>
+                <th>Durum</th>
+                <th>Açıklama</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Responsive</td>
+                <td>✅</td>
+                <td>Mobilde kusursuz çalışır.</td>
+              </tr>
+              <tr>
+                <td>Karanlık Mod</td>
+                <td>✅</td>
+                <td>Göz yormayan Slate paleti.</td>
+              </tr>
+              <tr>
+                <td>Full Width</td>
+                <td>✅</td>
+                <td>Kutulardan arındırılmış tasarım.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <hr class="my-12 border-primary">
+
+        <blockquote>"Tasarım sadece nasıl göründüğü değil, nasıl çalıştığıdır."
+          - Steve Jobs</blockquote>
+
+        <h3 id="-yapilacaklar-listesi"><a href="#-yapilacaklar-listesi">✅
+            Yapılacaklar Listesi</a></h3>
+
+        <label class="flex items-center gap-3 my-2 cursor-pointer">
+          <input type="checkbox" disabled="" checked=""
+            class="w-5 h-5 rounded border-primary text-accent focus:ring-accent">
+          <span class="text-secondary">Temiz kod yapısı</span>
+        </label>
+        <label class="flex items-center gap-3 my-2 cursor-pointer">
+          <input type="checkbox" disabled="" checked=""
+            class="w-5 h-5 rounded border-primary text-accent focus:ring-accent">
+          <span class="text-secondary">Mobil uyumluluk testi</span>
+        </label>
+        <label class="flex items-center gap-3 my-2 cursor-pointer">
+          <input type="checkbox" disabled=""
+            class="w-5 h-5 rounded border-primary text-accent focus:ring-accent">
+          <span class="text-secondary">Kullanıcı geri bildirimleri</span>
+        </label>
+        <label class="flex items-center gap-3 my-2 cursor-pointer">
+          <input type="checkbox" disabled="" checked=""
+            class="w-5 h-5 rounded border-primary text-accent focus:ring-accent">
+          <span class="text-secondary">Performans optimizasyonu</span>
+        </label>
+
+        <h3 id="-mermaid-diyagram-testi"><a href="#-mermaid-diyagram-testi">📊
+            Mermaid Diyagram Testi</a></h3>
+
+        Mermaid diyagramları artık otomatik olarak render edilir:
+
+        <div
+          class="overflow-x-auto my-8 p-4 bg-slate-50 dark:bg-slate-900/50 border border-primary/20 rounded-2xl">
+          <div class="mermaid flex justify-center text-center">graph TD
+            A[Node.js App] --&gt; B[DesktopWidget Class]
+            B --&gt; C[WidgetRegistry]
+            B --&gt; D[AutostartManager]
+            B --&gt; E[Native Module C++]
+            E --&gt; F{Platform}
+            F --&gt;|Linux| G[WebKitGTK + GTK3]
+            F --&gt;|macOS| H[WKWebView + Cocoa]
+            F --&gt;|Windows| I[WebView2 + Win32]
+            G --&gt; J[Desktop Widget Window]
+            H --&gt; J
+            I --&gt; J
+          </div>
+        </div>
+
+        <hr class="my-12 border-primary">
+        <em>MDtoWeb ile sevgiyle yapıldı.</em>
+
+      </div>
+
+
+      <div class="floating-controls">
+        <button id="theme-toggle"
+          class="control-btn hover:scale-110 active:scale-95 transition-all">
+          <i id="theme-toggle-icon" class="bi bi-sun text-2xl"></i>
+        </button>
+
+      </div>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+          const toggleButton = document.getElementById("theme-toggle");
+          const toggleIcon = document.getElementById("theme-toggle-icon");
+
+          function updateIcon() {
+            if (document.documentElement.classList.contains("dark")) {
+              toggleIcon.classList.remove("bi-sun");
+              toggleIcon.classList.add("bi-moon-stars");
+            } else {
+              toggleIcon.classList.remove("bi-moon-stars");
+              toggleIcon.classList.add("bi-sun");
+            }
+          }
+          updateIcon();
+          toggleButton?.addEventListener("click", () => {
+            document.documentElement.classList.toggle("dark");
+            const isDarkMode = document.documentElement.classList
+              .contains("dark");
+            localStorage.setItem("color-theme", isDarkMode ? "dark" :
+              "light");
+            updateIcon();
+          });
+
+
+          document.querySelector(".copy-btn")?.addEventListener("click",
+            function() {
+              const code = document.querySelector("pre code").innerText;
+              navigator.clipboard.writeText(code);
+              const copyBtn = document.getElementById("copyBtn");
+              copyBtn.classList.remove("bi-clipboard");
+              copyBtn.classList.add("bi-clipboard-check");
+            });
+        });
+      </script>
+      <p class="text-right text-black dark:text-white">Author: Osman Beyhan</p>
+      <div id="modal" class="fixed inset-0 z-[100] invisible">
+        <div id="modal-backdrop"
+          class="absolute inset-0 bg-black/20 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        </div>
+        <div id="modal-content"
+          class="relative w-4/5 max-w-xs h-full bg-white dark:bg-slate-900 shadow-2xl p-6 -translate-x-full transition-transform duration-300 ease-out overflow-y-auto">
+          <button id="closeModal"
+            class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-2xl transition-colors">×</button>
+          <div class="mb-8 pt-4">
+            <h2 class="text-xl font-bold tracking-tight">MDtoWeb Final Test</h2>
+            <p class="text-sm text-secondary pt-1">Documentation</p>
+          </div>
+          <div id="mobile-sidebar">
+
+            <div class="space-y-1">
+              <a id="nav-modern-mdtoweb-arayuz-testi"
+                href="#modern-mdtoweb-arayuz-testi"
+                class="nav-link indent-1 font-bold text-gray-900 dark:text-white">Modern
+                MDtoWeb Arayüz Testi</a><a id="nav--yeni-ozellikler"
+                href="#-yeni-ozellikler"
+                class="nav-link indent-2 font-medium">🚀 Yeni Özellikler</a><a
+                id="nav--teknik-bilesenler" href="#-teknik-bilesenler"
+                class="nav-link indent-3 font-medium">🛠️ Teknik
+                Bileşenler</a><a id="nav--kod-blogu-testi"
+                href="#-kod-blogu-testi"
+                class="nav-link indent-3 font-medium">💻 Kod Bloğu Testi</a><a
+                id="nav--tablo-sik-path-testi" href="#-tablo-sik-path-testi"
+                class="nav-link indent-3 font-medium">📊 Tablo &amp; Şık Path
+                Testi</a><a id="nav--yapilacaklar-listesi"
+                href="#-yapilacaklar-listesi"
+                class="nav-link indent-3 font-medium">✅ Yapılacaklar
+                Listesi</a><a id="nav--mermaid-diyagram-testi"
+                href="#-mermaid-diyagram-testi"
+                class="nav-link indent-3 font-medium">📊 Mermaid Diyagram
+                Testi</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const openModal = document.getElementById("openModal");
+          const closeModal = document.getElementById("closeModal");
+          const modal = document.getElementById("modal");
+          const backdrop = document.getElementById("modal-backdrop");
+          const content = document.getElementById("modal-content");
+
+          function toggleMenu(isOpen) {
+            const icon = openModal.querySelector('i');
+            if (isOpen) {
+              modal.classList.remove("invisible");
+              document.body.style.overflow = 'hidden';
+              if (icon) {
+                icon.classList.remove("bi-list");
+                icon.classList.add("bi-x-lg");
+              }
+              setTimeout(() => {
+                backdrop.classList.add("opacity-100");
+                content.classList.remove("-translate-x-full");
+              }, 10);
+            } else {
+              backdrop.classList.remove("opacity-100");
+              content.classList.add("-translate-x-full");
+              document.body.style.overflow = '';
+              if (icon) {
+                icon.classList.remove("bi-x-lg");
+                icon.classList.add("bi-list");
+              }
+              setTimeout(() => {
+                modal.classList.add("invisible");
+              }, 300);
+            }
+          }
+
+          openModal?.addEventListener("click", () => toggleMenu(true));
+          closeModal?.addEventListener("click", () => toggleMenu(false));
+          backdrop?.addEventListener("click", () => toggleMenu(false));
+        });
+      </script>
+    </main>
+  </div>
+
+  <!-- Mobile Navigation Bar -->
+  <div
+    class="lg:hidden fixed top-0 left-0 right-0 glass rounded-none border-t-0 p-4 flex items-center justify-between z-50">
+    <div id="mobile-logo" class="font-bold text-lg">MDtoWeb</div>
+    <button id="openModal" class="p-2 rounded-xl bg-primary/10 text-primary">
+      <i class="bi bi-list text-2xl"></i>
+    </button>
+  </div>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js">
+  </script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js">
+  </script>
+  <script>
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDarkMode ? 'dark' : 'default',
+      securityLevel: 'loose',
+      fontFamily: 'Afacad',
+      themeVariables: {
+        primaryColor: isDarkMode ? '#1e293b' : '#f8fafc',
+        primaryBorderColor: isDarkMode ? '#475569' : '#e2e8f0',
+        primaryTextColor: isDarkMode ? '#f1f5f9' : '#0f172a',
+        lineColor: isDarkMode ? '#94a3b8' : '#64748b',
+        secondaryColor: isDarkMode ? '#1e293b' : '#f8fafc',
+        tertiaryColor: isDarkMode ? '#1e293b' : '#f8fafc',
+        nodeBorder: isDarkMode ? '#475569' : '#e2e8f0'
+      }
+    });
+  </script>
+
+
+
+
+
+  <div class="mt-16 mb-10 py-8 border-t border-gray-100 dark:border-gray-800">
+    <p class="text-center text-sm text-secondary opacity-70">
+      MADE WITH ❤️ BY
+      <a href="https://www.mdtoweb.osmanbeyhan.com/"
+        class="text-accent hover:underline font-bold tracking-widest uppercase ml-1">MDtoWeb</a>
+    </p>
+  </div>
+</body>
+
+</html>
