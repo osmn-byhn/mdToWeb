@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script> 
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script> 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
@@ -27,31 +27,221 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
       tailwind.config = {
-        darkMode: 'class'
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: 'var(--text-primary)',
+              secondary: 'var(--text-secondary)',
+              accent: 'var(--accent-primary)',
+            }
+          }
+        }
       };
     </script>
     <style>
-      body {
-        font-family: "Afacad", serif;
+      :root {
+        --bg-main: #fcfcfd;
+        --bg-card: #ffffff;
+        --bg-sidebar: rgba(255, 255, 255, 0.8);
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --accent-primary: #3b82f6;
+        --border-primary: #f1f5f9;
+        --shadow-soft: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       }
+
+      .dark {
+        --bg-main: #020617;
+        --bg-card: #0f172a;
+        --bg-sidebar: rgba(15, 23, 42, 0.8);
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --accent-primary: #3b82f6;
+        --border-primary: #1e293b;
+        --shadow-soft: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+      }
+
+      body {
+        font-family: "Afacad", sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-primary);
+        line-height: 1.6;
+        transition: background-color 0.4s ease;
+      }
+
+      .container-layout {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      @media (min-width: 1024px) {
+        .container-layout {
+          flex-direction: row;
+          padding: 0 2rem;
+        }
+      }
+
+      #sidebar {
+        z-index: 40;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @media (min-width: 1024px) {
+        #sidebar {
+          position: sticky;
+          top: 2rem;
+          height: calc(100vh - 4rem);
+          width: 20rem;
+          flex-shrink: 0;
+          margin-top: 2rem;
+        }
+      }
+
+      #content {
+        flex-grow: 1;
+        width: 100%;
+        margin: 0 auto;
+        padding: 1.5rem;
+      }
+
+      @media (min-width: 1024px) {
+        #content {
+          padding: 2rem 3rem;
+          margin-top: 2rem;
+        }
+      }
+
+      .glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background-color: var(--bg-sidebar);
+        border: 1px solid var(--border-primary);
+        border-radius: 1.5rem;
+        box-shadow: var(--shadow-soft);
+      }
+
+      /* Navigation Links */
+      .nav-link {
+        display: block;
+        padding: 0.625rem 1rem;
+        border-radius: 0.75rem;
+        color: var(--text-secondary);
+        font-size: 0.9375rem;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+      }
+
+      .nav-link:hover {
+        background-color: var(--border-primary);
+        color: var(--text-primary);
+      }
+
+      .nav-link.active {
+        background-color: var(--bg-card);
+        color: var(--accent-primary);
+        border-color: var(--border-primary);
+        font-weight: 600;
+        box-shadow: var(--shadow-soft);
+      }
+
+      /* Hierarchy Indentation */
+      .indent-1 { padding-left: 1rem; }
+      .indent-2 { padding-left: 2rem; }
+      .indent-3 { padding-left: 3rem; }
+      .indent-4 { padding-left: 4rem; }
+      .indent-5 { padding-left: 5rem; }
+      .indent-6 { padding-left: 6rem; }
+
+      /* Code Blocks */
+      pre {
+        border-radius: 1rem !important;
+        background-color: #0f172a !important;
+        margin: 2rem 0 !important;
+        padding: 1.5rem !important;
+        border: 1px solid var(--border-primary) !important;
+      }
+
+      /* Lists */
+      .tree-list ul {
+        border-left: 1px solid var(--border-primary);
+        margin-left: 0.75rem;
+        padding-left: 1.5rem;
+      }
+
+      /* Theme Toggle & Mobile UI */
+      .floating-controls {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        z-index: 50;
+      }
+
+      .control-btn {
+        width: 3.5rem;
+        height: 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 1.25rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-primary);
+        box-shadow: var(--shadow-soft);
+        color: var(--text-primary);
+        transition: all 0.2s ease;
+      }
+
+      .control-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      }
+
+      /* Scrollbar */
+      ::-webkit-scrollbar { width: 5px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--border-primary); border-radius: 10px; }
     </style>
   </head>
   <body>
-    <div id="app" class="lg:flex lg:gap-4">
-      <div id="sidebar"></div>
-      <div id="content"></div>
+    <div class="container-layout pt-20 lg:pt-0">
+      <div id="sidebar" class="hidden lg:block glass overflow-y-auto"></div>
+      <main id="content" class="mb-12"></main>
     </div>
-    <hr class="mt-10" />
-    <div class="my-5">
-      <p class="text-center">
-        <span class="">❤️ Make via</span>
-        <a href="https://www.mdtoweb.osmanbeyhan.com/" class="text-blue-600"
-          >MDtoWeb</a
-        >
-      </p>
+
+    <!-- Mobile Navigation Bar -->
+    <div class="lg:hidden fixed top-0 left-0 right-0 glass rounded-none border-t-0 p-4 flex items-center justify-between z-50">
+      <div id="mobile-logo" class="font-bold text-lg">MDtoWeb</div>
+      <button id="openModal" class="p-2 rounded-xl bg-primary/10 text-primary">
+        <i class="bi bi-list text-2xl"></i>
+      </button>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: isDarkMode ? 'dark' : 'default',
+        securityLevel: 'loose',
+        fontFamily: 'Afacad',
+        themeVariables: {
+          primaryColor: isDarkMode ? '#1e293b' : '#f8fafc',
+          primaryBorderColor: isDarkMode ? '#475569' : '#e2e8f0',
+          primaryTextColor: isDarkMode ? '#f1f5f9' : '#0f172a',
+          lineColor: isDarkMode ? '#94a3b8' : '#64748b',
+          secondaryColor: isDarkMode ? '#1e293b' : '#f8fafc',
+          tertiaryColor: isDarkMode ? '#1e293b' : '#f8fafc',
+          nodeBorder: isDarkMode ? '#475569' : '#e2e8f0'
+        }
+      });
+    </script>
   </body>
+</html>
 </html>
 

@@ -5,28 +5,29 @@ export function returnAutoHeightSideBar(content) {
   const document = dom.window.document;
   const headings = [...document.querySelectorAll("h1, h2, h3, h4, h5, h6")];
   function slugify(text) {
-    return text.toLowerCase()
-      .replace(/ğ/g, 'g')
-      .replace(/ü/g, 'u')
-      .replace(/ş/g, 's')
-      .replace(/ı/g, 'i')
-      .replace(/ö/g, 'o')
-      .replace(/ç/g, 'c')
-      .replace(/[^a-z0-9\s]/g, '')
-      .replace(/\s+/g, '-');
+    return text
+      .toLowerCase()
+      .replace(/ğ/g, "g")
+      .replace(/ü/g, "u")
+      .replace(/ş/g, "s")
+      .replace(/ı/g, "i")
+      .replace(/ö/g, "o")
+      .replace(/ç/g, "c")
+      .replace(/[^a-z0-9 -]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
   }
+
   const transformedHeadings = headings.map((heading) => {
     const slug = slugify(heading.textContent);
-    return `<a id="${slug}" href="#${slug}" class="block p-2 font-bold">${heading.textContent}</a>`;
+    const level = heading.tagName.substring(1);
+    const fontSizeClass = level === '1' ? 'font-bold text-gray-900 dark:text-white' : 'font-medium';
+    return `<a id="nav-${slug}" href="#${slug}" class="nav-link indent-${level} ${fontSizeClass}">${heading.textContent}</a>`;
   }).join("");
 
   return `
-        <div class="flex flex-wrap gap-3 mt-12">
-            <div class="relative">
-                <div class="absolute mt-1 rounded-md w-48">
-                    ${transformedHeadings}
-                </div>
-            </div>
-        </div>
-    `;
+    <div class="space-y-1">
+      ${transformedHeadings}
+    </div>
+  `;
 }

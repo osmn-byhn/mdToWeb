@@ -1,41 +1,37 @@
+import { JSDOM } from "jsdom";
+
 export function returnFullHeightSideBar(content) {
-    // Geçici bir HTML container oluştur
-    const container = document.createElement("div");
-    container.innerHTML = content;
+    const dom = new JSDOM(`<!DOCTYPE html><html><body>${content}</body></html>`);
+    const document = dom.window.document;
+    const headings = [...document.querySelectorAll("h1, h2, h3, h4, h5, h6")];
 
-    // Başlıkları (h1-h6) bul
-    const headings = container.querySelectorAll("h1, h2, h3, h4, h5, h6");
-
-    // Türkçe karakterleri İngilizce'ye çevirme fonksiyonu
     function slugify(text) {
-        return text.toLowerCase()
-            .replace(/ğ/g, 'g')
-            .replace(/ü/g, 'u')
-            .replace(/ş/g, 's')
-            .replace(/ı/g, 'i')
-            .replace(/ö/g, 'o')
-            .replace(/ç/g, 'c')
-            .replace(/[^a-z0-9\s]/g, '')
-            .replace(/\s+/g, '-');
+        return text
+            .toLowerCase()
+            .replace(/ğ/g, "g")
+            .replace(/ü/g, "u")
+            .replace(/ş/g, "s")
+            .replace(/ı/g, "i")
+            .replace(/ö/g, "o")
+            .replace(/ç/g, "c")
+            .replace(/[^a-z0-9 -]/g, "")
+            .replace(/\s+/g, "-")
+            .replace(/-+/g, "-");
     }
 
-    // Dropdown menü içeriğini oluştur
-    let dropdownContent = "<ul class='p-2'>";
-    headings.forEach((heading) => {
+    const transformedHeadings = headings.map((heading) => {
         const slug = slugify(heading.textContent);
-        dropdownContent += `<li><a href="#${slug}" class="block p-2">${heading.textContent}</a></li>`;
-    });
-    dropdownContent += "</ul>";
+        const level = heading.tagName.substring(1);
+        const fontSizeClass = level === '1' ? 'font-bold text-gray-900 dark:text-white' : 'font-medium';
+        return `<a id="nav-${slug}" href="#${slug}" class="nav-link indent-${level} ${fontSizeClass}">${heading.textContent}</a>`;
+    }).join("");
 
     return `
-        <div class="flex flex-wrap gap-3 mt-12">
-            <div class="relative">
-                <button class="bg-gray-200 p-2 rounded-md">Başlıklar</button>
-                <div class="absolute hidden bg-white border shadow-md mt-1 rounded-md w-48">
-                    ${dropdownContent}
-                </div>
+        <div class="sidebar-tree space-y-1 mt-8">
+            <div class="px-3 mb-6">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Table of Contents</h3>
             </div>
-            ${content}
+            ${transformedHeadings}
         </div>
     `;
 }

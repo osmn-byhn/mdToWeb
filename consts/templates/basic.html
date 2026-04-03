@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script> 
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script> 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
@@ -27,27 +27,101 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
       tailwind.config = {
-        darkMode: 'class'
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: 'var(--text-primary)',
+              secondary: 'var(--text-secondary)',
+              accent: 'var(--accent-primary)',
+            }
+          }
+        }
       };
     </script>
     <style>
-      body {
-        font-family: "Afacad", serif;
+      :root {
+        --bg-main: #fcfcfd;
+        --bg-card: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --accent-primary: #3b82f6;
+        --border-primary: #f1f5f9;
+        --shadow-soft: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       }
+
+      .dark {
+        --bg-main: #020617;
+        --bg-card: #0f172a;
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --accent-primary: #3b82f6;
+        --border-primary: #1e293b;
+        --shadow-soft: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+      }
+
+      body {
+        font-family: "Afacad", sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-primary);
+        line-height: 1.6;
+        transition: background-color 0.4s ease;
+      }
+
+      #app > div {
+        transition: all 0.3s ease;
+      }
+
+      .glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-primary);
+        border-radius: 1.5rem;
+        box-shadow: var(--shadow-soft);
+      }
+
+      pre {
+        border-radius: 1rem !important;
+        background-color: #0f172a !important;
+        margin: 2rem 0 !important;
+        padding: 1.5rem !important;
+        border: 1px solid var(--border-primary) !important;
+      }
+
+      .tree-list ul {
+        border-left: 1px solid var(--border-primary);
+        margin-left: 0.75rem;
+        padding-left: 1.5rem;
+      }
+
+      ::-webkit-scrollbar { width: 5px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--border-primary); border-radius: 10px; }
     </style>
   </head>
   <body>
     <div id="app"></div>
-    <hr class="mt-10" />
-    <div class="my-5">
-      <p class="text-center">
-        <span class="">❤️ Make via</span>
-        <a href="https://www.mdtoweb.osmanbeyhan.com/" class="text-blue-600"
-          >MDtoWeb</a
-        >
-      </p>
-    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: isDarkMode ? 'dark' : 'default',
+        securityLevel: 'loose',
+        fontFamily: 'Afacad',
+        themeVariables: {
+          primaryColor: isDarkMode ? '#1e293b' : '#f8fafc',
+          primaryBorderColor: isDarkMode ? '#475569' : '#e2e8f0',
+          primaryTextColor: isDarkMode ? '#f1f5f9' : '#0f172a',
+          lineColor: isDarkMode ? '#94a3b8' : '#64748b',
+          secondaryColor: isDarkMode ? '#1e293b' : '#f8fafc',
+          tertiaryColor: isDarkMode ? '#1e293b' : '#f8fafc',
+          nodeBorder: isDarkMode ? '#475569' : '#e2e8f0'
+        }
+      });
+    </script>
   </body>
 </html>

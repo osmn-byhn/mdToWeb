@@ -17,74 +17,65 @@ export class MarkdownParser {
     return mdText
       .replace(/^###### (.*)$/gm, (_, text) => {
         const id = this.slugify(text);
-        return `<h6 id="${id}" class="text-md font-normal my-1">
-                <a href="#${id}">${text}</a>
-              </h6>`;
+        return `<h6 id="${id}"><a href="#${id}">${text}</a></h6>`;
       })
       .replace(/^##### (.*)$/gm, (_, text) => {
         const id = this.slugify(text);
-        return `<h5 id="${id}" class="text-md font-normal my-1 !text-gray-600 dark:!text-gray-100">
-                <a href="#${id}">${text}</a>
-              </h5>`;
+        return `<h5 id="${id}"><a href="#${id}">${text}</a></h5>`;
       })
       .replace(/^#### (.*)$/gm, (_, text) => {
         const id = this.slugify(text);
-        return `<h4 id="${id}" class="text-lg font-normal my-1 !text-gray-600 dark:!text-gray-100">
-                <a href="#${id}">${text}</a>
-              </h4>`;
+        return `<h4 id="${id}"><a href="#${id}">${text}</a></h4>`;
       })
       .replace(/^### (.*)$/gm, (_, text) => {
         const id = this.slugify(text);
-        return `<h3 id="${id}" class="text-xl font-semibold my-1 !text-gray-600 dark:!text-gray-100">
-                <a href="#${id}">${text}</a>
-              </h3>`;
+        return `<h3 id="${id}"><a href="#${id}">${text}</a></h3>`;
       })
       .replace(/^## (.*)$/gm, (_, text) => {
         const id = this.slugify(text);
-        return `<h2 id="${id}" class="text-2xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
-                <a href="#${id}">${text}</a>
-              </h2>`;
+        return `<h2 id="${id}"><a href="#${id}">${text}</a></h2>`;
       })
       .replace(/^# (.*)$/gm, (_, text) => {
         const id = this.slugify(text);
-        return `<h1 id="${id}" class="text-3xl font-bold my-1 !text-gray-600 dark:!text-gray-100">
-                <a href="#${id}">${text}</a>
-              </h1>`;
+        return `<h1 id="${id}"><a href="#${id}">${text}</a></h1>`;
       })
-      .replace(/\*\*(.*?)\*\*/g, "<b class='font-bold'>$1</b>")
-      .replace(/\*(.*?)\*/g, "<i class='italic'>$1</i>")
-      .replace(/~~(.*?)~~/g, "<del class='line-through'>$1</del>")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>")
+      .replace(/~~(.*?)~~/g, "<del>$1</del>")
+      .replace(/```mermaid\n([\s\S]*?)```/g, '<div class="overflow-x-auto my-8 p-4 bg-slate-50 dark:bg-slate-900/50 border border-primary/20 rounded-2xl"><div class="mermaid flex justify-center text-center">$1</div></div>')
       .replace(
         /```(\w+)\n([\s\S]*?)```/g,
-        "<div class='code-container relative rounded-lg p-4 overflow-auto mt-2'>" +
-          "<button class='copy-btn absolute top-3 right-3 bg-gray-200 dark:bg-gray-700 text-black dark:text-white px-3 py-1 text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition m-[25px] z-[10]'>" +
-          "<i id='copyBtn' class='bi bi-clipboard'></i></button>" +
-          "<pre class='line-numbers'><code class='language-$1'>$2</code></pre></div>"
+        "<div class='code-container relative rounded-2xl shadow-sm border border-primary overflow-hidden my-8'>" +
+          "<div class='flex items-center justify-between px-6 py-3 bg-gray-50/50 dark:bg-gray-800/30 border-b border-primary'>" +
+          "<span class='text-xs font-medium tracking-widest uppercase text-secondary'>$1</span>" +
+          "<button class='copy-btn text-secondary hover:text-primary transition-all active:scale-90'>" +
+          "<i id='copyBtn' class='bi bi-clipboard text-lg'></i></button></div>" +
+          "<pre class='line-numbers !m-0 !bg-transparent !p-6'><code class='language-$1'>$2</code></pre></div>"
       )
-      .replace(/`(.*?)`/g, "<code class='bg-gray-200 px-1 rounded'>$1</code>")
+      .replace(/`(.*?)`/g, "<code class='bg-secondary/10 text-primary px-1.5 py-0.5 rounded-md font-mono text-sm'>$1</code>")
       .replace(
         /^> (.*$)/gm,
-        "<blockquote class='border-l-4 border-gray-500 pl-4 italic'>$1</blockquote>"
+        "<blockquote>$1</blockquote>"
       )
-      .replace(/^---$/gm, "<hr class='border-gray-300 my-4'>")
+      .replace(/^---$/gm, "<hr class='my-12 border-primary'>")
       .replace(
         /!\[(.*?)(?:\s=\s*(\d+)x(\d+))?\]\((.*?)\)/g,
         (match, alt, width, height, src) => {
           const widthAttr = width ? ` width='${width}px'` : "";
           const heightAttr = height ? ` height='${height}px'` : "";
-          return `<img class='rounded-md my-2' src='${src}' alt='${alt}'${widthAttr}${heightAttr}>`;
+          return `<img class='rounded-2xl my-8 shadow-md' src='${src}' alt='${alt}'${widthAttr}${heightAttr}>`;
         }
       )
       .replace(/- \[(x|X| )\] (.+)/g, (_, checked, text) => {
         const isChecked = checked.trim().toLowerCase() === "x";
-        return `<label style="display: block;">
-                  <input type="checkbox" disabled ${isChecked ? "checked" : ""}>
-                  ${text}
+        return `<label class="flex items-center gap-3 my-2 cursor-pointer">
+                  <input type="checkbox" disabled ${isChecked ? "checked" : ""} class="w-5 h-5 rounded border-primary text-accent focus:ring-accent">
+                  <span class="text-secondary">${text}</span>
                 </label>`;
       })
       .replace(
         /\[(.*?)\]\((.*?)\)/g,
-        "<a class='text-blue-500 hover:underline' href='$2'>$1</a>"
+        "<a href='$2'>$1</a>"
       )
       .replace(/^\s*[-*]\s(.*)$/gm, "<li>$1</li>")
       .replace(/^( *)([-*]) (.*)$/gm, (match, spaces, bullet, text) => {
@@ -95,13 +86,11 @@ export class MarkdownParser {
         const level = spaces.length / 2;
         return `<li class="ml-${level * 4}">${text}</li>`;
       })
-      .replace(/(<li.*?<\/li>)/gs, "<ul class='list-disc pl-5'>$1</ul>")
-      .replace(
-        /(<ul class='list-disc pl-5'>\s*<li class="ml-\d+">.*?<\/li>)\s*<ul class='list-disc pl-5'>/gs,
-        "<ul class='list-decimal pl-7'>$1"
-      )
-
-      .replace(/<\/ul>\n<ul class='list-disc pl-5'>/g, "")
+      .replace(/(?:<li>.*<\/li>\s*)+/g, (match) => {
+        return `<ul class='tree-list'>${match}</ul>`;
+      })
+      .replace(/<ul class='tree-list'>\s*(<li class="ml-\d+">.*?<\/li>)\s*<ul class='tree-list'>/g, "<ul>$1")
+      .replace(/<\/ul>\s*<ul class='tree-list'>/g, "")
       .replace(
         /\|(.+)\|\n\|[-:\s|]+\|\n((?:\|.*\|\n)*)/g,
         (match, headers, rows) => {
@@ -112,38 +101,45 @@ export class MarkdownParser {
           const headerHtml = headerArray
             .map(
               (h) =>
-                `<th class='p-2 border border-gray-700 bg-gray-800 text-white'>${h}</th>`
+                `<th>${h}</th>`
             )
             .join("\n");
           const rowsHtml = rows
             .trim()
             .split("\n")
-            .map((row, index) => {
+            .map((row) => {
               const cells = row
                 .split("|")
                 .map((cell) => cell.trim())
                 .filter((cell) => cell);
               if (!cells.length) return "";
-              return `<tr class='${
-                index % 2 === 0 ? "bg-gray-100 bg-gray-100 dark:bg-gray-900" : "bg-gray-200 dark:bg-gray-800"
-              }'>
+              return `<tr>
             ${cells
               .map(
-                (cell) =>
-                  `<td class='p-2 border border-gray-700 text-center text-black dark:text-white'>${cell}</td>`
+                (cell) => {
+                  // Detect paths and style them
+                  const styledCell = cell.replace(
+                      /((?:[\w.-]+\/)+[\w.-]+|(?:\/[\w.-]+)+)/g, 
+                      `<span class='inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-accent/5 text-accent font-mono text-[0.85em] border border-accent/10'>
+                        <i class='bi bi-folder2-open opacity-70'></i>
+                        $1
+                      </span>`
+                  );
+                  return `<td>${styledCell}</td>`;
+                }
               )
               .join("\n")}
           </tr>`;
             })
             .join("\n");
           return `
-          <div class='overflow-x-auto my-4'>
-            <table class='table-auto w-full border border-gray-700'>
-              <thead><tr>${headerHtml}</tr></thead>
+          <div class='overflow-x-auto my-8 border-b border-primary/50'>
+            <table class='!m-0 w-full text-left border-collapse'>
+              <thead><tr class='border-b border-primary'>${headerHtml}</tr></thead>
               <tbody>${rowsHtml}</tbody>
             </table>
           </div>`;
         }
-      );
+      )
   }
 }
